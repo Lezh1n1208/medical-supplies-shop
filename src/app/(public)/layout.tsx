@@ -1,5 +1,5 @@
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -13,7 +13,7 @@ const jakarta = Plus_Jakarta_Sans({
   display: "swap",
 });
 
-export default function RootLayout({
+export default function PublicLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
