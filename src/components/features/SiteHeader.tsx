@@ -1,67 +1,36 @@
 "use client";
 import { useState } from "react";
-import {
-  Search,
-  Phone,
-  Mail,
-  ChevronDown,
-  Menu,
-  X,
-  ShoppingCart,
-  MapPin,
-  Clock,
-  Heart,
-} from "lucide-react";
-
-const navLinks = [
-  { label: "Trang chủ", href: "#", active: true },
-  {
-    label: "Sản phẩm",
-    href: "#products",
-    submenu: [
-      "Thiết bị chẩn đoán",
-      "Dụng cụ phẫu thuật",
-      "Thiết bị ICU",
-      "Vật tư tiêu hao",
-      "Thiết bị xét nghiệm",
-      "Phục hồi chức năng",
-    ],
-  },
-  { label: "Dịch vụ", href: "#" },
-  { label: "Giới thiệu", href: "#" },
-  { label: "Tuyển dụng", href: "#" },
-  { label: "Tin tức", href: "#" },
-  { label: "Liên hệ", href: "#contact" },
-];
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Search, Phone, Mail, Menu, X, MapPin, Clock } from "lucide-react";
+import { NAV_LINKS } from "@/constants/navigation";
 
 export function SiteHeader() {
+  const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchVal, setSearchVal] = useState("");
-  const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
 
   return (
     <header className="sticky top-0 z-50 w-full shadow-md">
-      {/* Topbar */}
+      {/* ── Topbar ─────────────────────────────────────────────────── */}
       <div style={{ backgroundColor: "#0D2B6E" }}>
         <div className="max-w-7xl mx-auto px-4 h-10 flex items-center justify-between">
           <div className="hidden md:flex items-center gap-5">
-            <a
-              href="#"
-              className="flex items-center gap-1.5 text-blue-200 hover:text-white transition-colors"
+            <span
+              className="flex items-center gap-1.5 text-blue-200"
+              style={{ fontSize: "11px" }}
             >
               <MapPin size={12} />
-              <span style={{ fontSize: "11px" }}>
-                Số 1 Đại Cồ Việt, Hai Bà Trưng, Hà Nội
-              </span>
-            </a>
+              Số 1 Đại Cồ Việt, Hai Bà Trưng, Hà Nội
+            </span>
             <div className="w-px h-3 bg-blue-700" />
-            <a
-              href="#"
-              className="flex items-center gap-1.5 text-blue-200 hover:text-white transition-colors"
+            <span
+              className="flex items-center gap-1.5 text-blue-200"
+              style={{ fontSize: "11px" }}
             >
               <Clock size={12} />
-              <span style={{ fontSize: "11px" }}>T2–T7: 8:00 – 17:30</span>
-            </a>
+              T2–T7: 8:00 – 17:30
+            </span>
           </div>
           <div className="flex items-center gap-4 ml-auto">
             <a
@@ -71,33 +40,15 @@ export function SiteHeader() {
               <Mail size={12} />
               <span style={{ fontSize: "11px" }}>info@medprovn.com</span>
             </a>
-            <div className="w-px h-3 bg-blue-700" />
-            <a
-              href="#"
-              className="text-blue-200 hover:text-white transition-colors"
-              style={{ fontSize: "11px" }}
-            >
-              Đăng nhập
-            </a>
-            <span className="text-blue-700" style={{ fontSize: "11px" }}>
-              |
-            </span>
-            <a
-              href="#"
-              className="text-blue-200 hover:text-white transition-colors"
-              style={{ fontSize: "11px" }}
-            >
-              Đăng ký
-            </a>
           </div>
         </div>
       </div>
 
-      {/* Main header */}
+      {/* ── Main header ────────────────────────────────────────────── */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center gap-4">
           {/* Logo */}
-          <a href="#" className="flex items-center gap-2.5 flex-shrink-0">
+          <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
             <div
               className="w-9 h-9 rounded-lg flex items-center justify-center"
               style={{
@@ -129,7 +80,7 @@ export function SiteHeader() {
                 VIỆT NAM
               </div>
             </div>
-          </a>
+          </Link>
 
           {/* Search */}
           <div className="flex-1 max-w-xl mx-auto">
@@ -143,16 +94,13 @@ export function SiteHeader() {
                   type="text"
                   value={searchVal}
                   onChange={(e) => setSearchVal(e.target.value)}
-                  placeholder="Tìm kiếm sản phẩm, thiết bị y tế..."
-                  className="w-full pl-9 pr-4 py-2.5 border border-gray-300 border-r-0 
-                    rounded-l-lg bg-gray-50 text-sm 
-                    focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 
-                    transition-all"
+                  placeholder="Tìm kiếm sản phẩm"
+                  className="w-full pl-9 pr-4 py-2.5 border border-gray-300 border-r-0 rounded-l-lg bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all"
                   style={{ fontSize: "13px" }}
                 />
               </div>
               <button
-                className="px-4 text-white rounded-r-lg text-sm font-semibold flex-shrink-0 transition-all hover:opacity-90"
+                className="px-4 text-white rounded-r-lg font-semibold flex-shrink-0 transition-all hover:opacity-90"
                 style={{ backgroundColor: "#00897B", fontSize: "13px" }}
               >
                 Tìm kiếm
@@ -160,7 +108,7 @@ export function SiteHeader() {
             </div>
           </div>
 
-          {/* Hotline + actions */}
+          {/* Actions */}
           <div className="flex items-center gap-3 flex-shrink-0">
             <a
               href="tel:18001234"
@@ -195,32 +143,6 @@ export function SiteHeader() {
                 </p>
               </div>
             </a>
-            <button className="relative p-2 rounded-lg hover:bg-gray-100 transition-all text-gray-500 hover:text-gray-700">
-              <Heart size={18} />
-              <span
-                className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full text-white flex items-center justify-center"
-                style={{
-                  backgroundColor: "#DC2626",
-                  fontSize: "9px",
-                  fontWeight: 700,
-                }}
-              >
-                3
-              </span>
-            </button>
-            <button className="relative p-2 rounded-lg hover:bg-gray-100 transition-all text-gray-500 hover:text-gray-700">
-              <ShoppingCart size={18} />
-              <span
-                className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full text-white flex items-center justify-center"
-                style={{
-                  backgroundColor: "#1565C0",
-                  fontSize: "9px",
-                  fontWeight: 700,
-                }}
-              >
-                5
-              </span>
-            </button>
             <button
               className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-all"
               onClick={() => setMobileOpen(!mobileOpen)}
@@ -235,76 +157,57 @@ export function SiteHeader() {
         </div>
       </div>
 
-      {/* Navbar */}
-      <div className="hidden md:block" style={{ backgroundColor: "#1565C0" }}>
+      {/* ── Navbar ─────────────────────────────────────────────────── */}
+      <nav className="hidden md:block" style={{ backgroundColor: "#1565C0" }}>
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center">
-            {/* Categories button */}
-            <button
-              className="flex items-center gap-2 px-4 py-3 mr-2 font-semibold text-white transition-all"
+            {/* Danh mục button */}
+            <Link
+              href="/danh-muc"
+              className="flex items-center gap-2 px-4 py-3 mr-2 font-semibold text-white transition-all hover:opacity-90"
               style={{ backgroundColor: "#00897B", fontSize: "13px" }}
             >
               <Menu size={14} />
               Danh mục sản phẩm
-            </button>
+            </Link>
 
-            {navLinks.map((link) => (
-              <div
-                key={link.label}
-                className="relative group"
-                onMouseEnter={() => link.submenu && setOpenSubmenu(link.label)}
-                onMouseLeave={() => setOpenSubmenu(null)}
-              >
-                <a
+            {NAV_LINKS.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <Link
+                  key={link.href}
                   href={link.href}
-                  className="flex items-center gap-1 px-4 py-3 font-medium transition-all hover:bg-blue-600"
+                  className="flex items-center px-4 py-3 font-medium transition-colors duration-200 hover:bg-blue-500/20 hover:text-blue-200"
                   style={{
                     fontSize: "13px",
-                    color: link.active ? "#93C5FD" : "#fff",
-                    borderBottom: link.active
+                    color: isActive ? "#93C5FD" : "#fff",
+                    borderBottom: isActive
                       ? "2px solid #93C5FD"
                       : "2px solid transparent",
                   }}
                 >
                   {link.label}
-                  {link.submenu && (
-                    <ChevronDown size={12} className="opacity-70" />
-                  )}
-                </a>
-                {link.submenu && openSubmenu === link.label && (
-                  <div className="absolute top-full left-0 w-52 bg-white rounded-b-xl shadow-xl border border-gray-100 z-50 py-2">
-                    {link.submenu.map((item) => (
-                      <a
-                        key={item}
-                        href="#"
-                        className="block px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
-                        style={{ fontSize: "13px" }}
-                      >
-                        {item}
-                      </a>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
+                </Link>
+              );
+            })}
           </div>
         </div>
-      </div>
+      </nav>
 
-      {/* Mobile menu */}
+      {/* ── Mobile menu ────────────────────────────────────────────── */}
       {mobileOpen && (
         <div className="md:hidden bg-white border-t border-gray-200 shadow-lg">
           <div className="max-w-7xl mx-auto px-4 py-3 space-y-1">
-            {navLinks.map((link) => (
-              <a
-                key={link.label}
+            {NAV_LINKS.map((link) => (
+              <Link
+                key={link.href}
                 href={link.href}
                 className="block px-4 py-2.5 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors font-medium"
                 style={{ fontSize: "14px" }}
                 onClick={() => setMobileOpen(false)}
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
             <div className="pt-3 border-t border-gray-200">
               <a

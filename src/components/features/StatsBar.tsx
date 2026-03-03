@@ -1,34 +1,40 @@
-"use client"
+"use client";
 import { useEffect, useRef, useState } from "react";
-import { Building2, PackageCheck, Clock, Headphones, Star } from "lucide-react";
+import {
+  PackageCheck,
+  Handshake,
+  Clock,
+  ShieldCheck,
+  Star,
+} from "lucide-react";
 
 const stats = [
-  {
-    icon: <Building2 size={22} />,
-    value: 500,
-    suffix: "+",
-    label: "Bệnh viện & Phòng khám",
-    color: "#1565C0",
-  },
   {
     icon: <PackageCheck size={22} />,
     value: 50,
     suffix: "+",
-    label: "Thương hiệu chính hãng",
+    label: "Sản phẩm đang kinh doanh",
+    color: "#1565C0",
+  },
+  {
+    icon: <Handshake size={22} />,
+    value: 30,
+    suffix: "+",
+    label: "Đối tác B2B tin dùng",
     color: "#00897B",
   },
   {
-    icon: <Clock size={22} />,
+    icon: <ShieldCheck size={22} />,
     value: 15,
     suffix: "+",
-    label: "Năm kinh nghiệm",
+    label: "Thương hiệu chính hãng",
     color: "#7B1FA2",
   },
   {
-    icon: <Headphones size={22} />,
+    icon: <Clock size={22} />,
     value: 24,
-    suffix: "/7",
-    label: "Hỗ trợ kỹ thuật",
+    suffix: "h",
+    label: "Giao hàng nội thành",
     color: "#D97706",
   },
   {
@@ -50,6 +56,7 @@ function CountUp({
   active: boolean;
 }>) {
   const [count, setCount] = useState(0);
+
   useEffect(() => {
     if (!active) return;
     let start = 0;
@@ -59,10 +66,13 @@ function CountUp({
       if (start >= target) {
         setCount(target);
         clearInterval(timer);
-      } else setCount(start);
+      } else {
+        setCount(start);
+      }
     }, 30);
     return () => clearInterval(timer);
   }, [active, target]);
+
   return (
     <span>
       {count}
@@ -92,6 +102,7 @@ export function StatsBar() {
         <div className="grid grid-cols-2 md:grid-cols-5 divide-x divide-gray-100">
           {stats.map((stat, i) => (
             <div
+              // eslint-disable-next-line react/no-array-index-key
               key={i}
               className="flex flex-col items-center justify-center py-6 px-4 gap-2 hover:bg-gray-50 transition-colors"
             >
