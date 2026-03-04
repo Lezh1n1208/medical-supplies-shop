@@ -40,7 +40,7 @@ async function verifyAdminSession(cookieValue?: string) {
   return signature === expected;
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   const session = request.cookies.get("admin_session")?.value;

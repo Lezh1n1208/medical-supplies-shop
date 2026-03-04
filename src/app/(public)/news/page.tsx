@@ -1,3 +1,4 @@
+"use client"
 import { NewsSection } from "@/components/features/NewsSection";
 
 export default function NewsPage() {

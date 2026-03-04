@@ -1,3 +1,4 @@
+"use client";
 import { StatsBar } from "@/components/features/StatsBar";
 import { TestimonialsSection } from "@/components/features/TestimonialsSection";
 import { BrandsSection } from "@/components/features/BrandsSection";

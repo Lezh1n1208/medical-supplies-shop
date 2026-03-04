@@ -1,3 +1,4 @@
+"use client";
 import { CTABanner } from "@/components/features/CTABanner";
 
 export default function ContactPage() {

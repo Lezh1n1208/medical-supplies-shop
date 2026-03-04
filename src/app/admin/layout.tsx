@@ -1,20 +1,6 @@
 import Link from "next/link";
-import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import { LayoutDashboard, Package, Tags, LogOut, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import "../globals.css";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-const jakarta = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  variable: "--font-jakarta",
-  display: "swap",
-});
 
 const adminNavItems = [
   { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -60,7 +46,7 @@ export default function AdminLayout({
       </aside>
 
       {/* Main Content */}
-      <main className={`flex-1 flex flex-col ${inter.variable} ${jakarta.variable}`}>
+      <main className="flex-1 flex flex-col">
         {/* Header */}
         <header className="h-16 border-b bg-white flex items-center justify-between px-6">
           <div className="flex items-center gap-4">
@@ -76,9 +62,7 @@ export default function AdminLayout({
         </header>
 
         {/* Page Content */}
-        <div className="flex-1 p-6 bg-slate-50">
-          {children}
-        </div>
+        <div className="flex-1 p-6 bg-slate-50">{children}</div>
       </main>
     </div>
   );
