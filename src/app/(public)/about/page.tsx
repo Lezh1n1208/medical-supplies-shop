@@ -1,5 +1,3 @@
-import { SiteHeader } from "@/components/features/SiteHeader";
-import { SiteFooter } from "@/components/features/SiteFooter";
 import { StatsBar } from "@/components/features/StatsBar";
 import { TestimonialsSection } from "@/components/features/TestimonialsSection";
 import { BrandsSection } from "@/components/features/BrandsSection";
@@ -8,8 +6,6 @@ import { Shield, Award, Users, TrendingUp } from "lucide-react";
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-white">
-      <SiteHeader />
-
       <main>
         {/* ───────── HERO ───────── */}
         <section
@@ -36,6 +32,7 @@ export default function AboutPage() {
                 { val: "1.000+", label: "Sản phẩm" },
                 { val: "5+ năm", label: "Phát triển" },
               ].map((item, i) => (
+                // eslint-disable-next-line react/no-array-index-key
                 <div key={i}>
                   <div className="text-2xl font-bold">{item.val}</div>
                   <div className="text-blue-200 text-xs mt-1">{item.label}</div>
@@ -75,6 +72,7 @@ export default function AboutPage() {
                   desc: "Không ngừng đổi mới và nâng cao dịch vụ.",
                 },
               ].map((item, i) => (
+                // eslint-disable-next-line react/no-array-index-key
                 <div key={i} className="text-center">
                   <div className="w-9 h-9 mx-auto mb-3 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center">
                     {item.icon}
@@ -93,8 +91,6 @@ export default function AboutPage() {
         <TestimonialsSection />
         <BrandsSection />
       </main>
-
-      <SiteFooter />
     </div>
   );
 }

@@ -1,5 +1,8 @@
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "../globals.css";
+import { SiteHeader } from "@/components/features/SiteHeader";
+import { SiteFooter } from "@/components/features/SiteFooter";
+import { FloatingContacts } from "@/components/ui/FloatingContacts";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -21,7 +24,10 @@ export default function PublicLayout({
   return (
     <html lang="vi" suppressHydrationWarning>
       <body className={`${inter.variable} ${jakarta.variable} antialiased`}>
-        {children}
+        <SiteHeader />
+        <main>{children}</main>
+        <SiteFooter />
+        <FloatingContacts />
       </body>
     </html>
   );

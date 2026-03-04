@@ -12,7 +12,7 @@ export function SiteHeader() {
   const [searchVal, setSearchVal] = useState("");
   const [isScrolled, setIsScrolled] = useState(false);
 
-  // ===== ResizeObserver đo height - FIX: Dùng Math.round và cộng thêm 1px =====
+  // ===== ResizeObserver =====
   const topHeaderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -21,7 +21,6 @@ export function SiteHeader() {
     const el = topHeaderRef.current;
 
     const updateHeight = () => {
-      // FIX: Làm tròn và cộng thêm 1px để đảm bảo không có gap
       const rect = el.getBoundingClientRect();
       const height = Math.round(rect.height) + 1;
       document.documentElement.style.setProperty(
@@ -255,12 +254,11 @@ export function SiteHeader() {
         </nav>
       </div>
 
-      {/* ===== SPACER - FIX: Tính chính xác tổng height ===== */}
+      {/* ===== SPACER ===== */}
       <div
         className="hidden md:block"
         style={{
-          height: "calc(var(--top-header-height))",
-          // FIX: Đảm bảo không có margin/padding gây gap
+          height: "var(--top-header-height)",
           margin: 0,
           padding: 0,
         }}
