@@ -1,305 +1,248 @@
-import {
-  Phone,
-  Mail,
-  MapPin,
-  Facebook,
-  Youtube,
-  Linkedin,
-  ArrowRight,
-  Shield,
-  Award,
-  CheckCircle,
-} from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { Phone, Mail, MapPin, ArrowRight } from "lucide-react";
+
+// ── Data ────────────────────────────────────────────────────────────────────
 
 const productLinks = [
-  "Thiết bị chẩn đoán",
-  "Dụng cụ phẫu thuật",
-  "Thiết bị ICU & Hồi sức",
-  "Vật tư tiêu hao",
-  "Thiết bị xét nghiệm",
-  "Phục hồi chức năng",
+  { label: "Vật tư tiêu hao", href: "/san-pham?category=vat-tu-tieu-hao" },
+  { label: "Vật tư chỉnh hình", href: "/san-pham?category=chinh-hinh" },
+  { label: "Giấy in y tế", href: "/san-pham?category=giay-in" },
 ];
 
 const serviceLinks = [
-  "Tư vấn & Lập dự toán",
-  "Cung cấp thiết bị y tế",
-  "Lắp đặt & Vận hành",
-  "Bảo trì định kỳ",
-  "Hỗ trợ đấu thầu",
-  "Đào tạo người dùng",
+  { label: "Tư vấn & Báo giá", href: "/dich-vu" },
+  { label: "Cung cấp vật tư y tế", href: "/dich-vu" },
+  { label: "Hỗ trợ đấu thầu", href: "/dich-vu" },
+  { label: "Giao hàng toàn quốc", href: "/dich-vu" },
 ];
 
-const companyLinks = [
-  "Giới thiệu công ty",
-  "Chứng nhận & Giải thưởng",
-  "Đối tác thương hiệu",
-  "Tin tức & Blog",
-  "Tuyển dụng",
-  "Liên hệ",
-];
+// ── Zalo SVG ────────────────────────────────────────────
+function ZaloIcon({ size = 16 }: { readonly size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M12 2C6.477 2 2 6.254 2 11.5c0 2.7 1.17 5.132 3.05 6.87L4 22l3.75-1.268C9.097 21.538 10.517 22 12 22c5.523 0 10-4.254 10-9.5S17.523 2 12 2zm-1.07 5.5h1.46v4.17l3.01-4.17h1.68l-3.2 4.33 3.38 4.67h-1.77l-3.1-4.35v4.35h-1.46V7.5zm-3.68.93c.39 0 .71.32.71.71v5.72a.71.71 0 01-1.42 0V9.14c0-.39.32-.71.71-.71z" />
+    </svg>
+  );
+}
+
+// ── Component ───────────────────────────────────────────
 
 export function SiteFooter() {
   return (
     <footer>
-      {/* Main footer */}
+      {/* ── Main Footer ─────────────────────────── */}
       <div style={{ backgroundColor: "#0D2B6E" }}>
-        <div className="max-w-7xl mx-auto px-4 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* Brand */}
-            <div>
-              <div className="flex items-center gap-2.5 mb-4">
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center"
-                  style={{
-                    background: "linear-gradient(135deg, #1565C0, #00897B)",
-                  }}
-                >
+        <div className="max-w-7xl mx-auto px-4 py-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12">
+            {/* ── Brand ─────────────────────────── */}
+            <div className="lg:col-span-4">
+              <Link
+                href="/"
+                className="flex items-center gap-2.5 mb-4 w-fit group"
+              >
+                <Image
+                  src="/logo.png"
+                  alt="Ánh Dương Phát"
+                  width={40}
+                  height={40}
+                  className="object-contain rounded-lg transition-transform duration-200 group-hover:scale-105"
+                />
+                <div className="flex flex-col leading-none">
                   <span
-                    className="text-white font-black"
-                    style={{ fontSize: "16px" }}
+                    className="text-white font-black leading-tight"
+                    style={{ fontSize: "15px", letterSpacing: "-0.01em" }}
                   >
-                    M
+                    Ánh Dương Phát
+                  </span>
+                  <span
+                    className="font-semibold mt-0.5"
+                    style={{
+                      fontSize: "8.5px",
+                      color: "#5EEAD4",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.18em",
+                    }}
+                  >
+                    Vật tư y tế
                   </span>
                 </div>
-                <div>
-                  <div
-                    className="text-white leading-none"
-                    style={{ fontSize: "16px", fontWeight: 800 }}
-                  >
-                    MedPro
-                  </div>
-                  <div
-                    className="text-teal-400 leading-none mt-0.5"
-                    style={{
-                      fontSize: "10px",
-                      fontWeight: 600,
-                      letterSpacing: "0.08em",
-                    }}
-                  >
-                    VIỆT NAM
-                  </div>
-                </div>
-              </div>
+              </Link>
+
               <p
-                className="text-blue-200 mb-5"
+                className="text-blue-200 mb-6"
                 style={{ fontSize: "13px", lineHeight: 1.8 }}
               >
-                Đơn vị cung ứng thiết bị y tế chính hãng hàng đầu Việt Nam. Đối
-                tác tin cậy của 500+ bệnh viện và phòng khám toàn quốc.
+                Chuyên cung cấp và phân phối vật tư – trang thiết bị y tế đạt chuẩn, nguồn gốc rõ ràng, giá hợp lý. Cam kết uy tín, chất lượng và phát triển bền vững.
               </p>
 
-              {/* Certifications */}
-              <div className="flex gap-2 mb-5 flex-wrap">
-                {[
-                  { icon: <Shield size={12} />, text: "ISO 9001" },
-                  { icon: <CheckCircle size={12} />, text: "CE Mark" },
-                  { icon: <Award size={12} />, text: "Bộ Y tế" },
-                ].map((cert, i) => (
-                  <div
-                    key={i}
-                    className="flex items-center gap-1 px-2 py-1 rounded-md border"
-                    style={{
-                      borderColor: "rgba(255,255,255,0.15)",
-                      backgroundColor: "rgba(255,255,255,0.07)",
-                      fontSize: "11px",
-                      color: "#93C5FD",
-                    }}
+              <div className="flex gap-3">
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded-lg flex items-center justify-center text-blue-300 hover:text-white hover:bg-blue-700 transition-all"
+                  style={{ backgroundColor: "rgba(255,255,255,0.08)" }}
+                >
+                  <svg
+                    width={16}
+                    height={16}
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
                   >
-                    {cert.icon}
-                    {cert.text}
-                  </div>
-                ))}
-              </div>
+                    <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
+                  </svg>
+                </a>
 
-              {/* Social */}
-              <div className="flex gap-2">
-                {[
-                  { icon: <Facebook size={16} />, label: "Facebook" },
-                  { icon: <Youtube size={16} />, label: "Youtube" },
-                  { icon: <Linkedin size={16} />, label: "LinkedIn" },
-                ].map((social, i) => (
-                  <a
-                    key={i}
-                    href="#"
-                    className="w-8 h-8 rounded-lg flex items-center justify-center text-blue-300 hover:text-white hover:bg-blue-700 transition-all"
-                    style={{ backgroundColor: "rgba(255,255,255,0.08)" }}
-                  >
-                    {social.icon}
-                  </a>
-                ))}
+                <a
+                  href="https://zalo.me/0983498177"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded-lg flex items-center justify-center text-blue-300 hover:text-white hover:bg-blue-700 transition-all"
+                  style={{ backgroundColor: "rgba(255,255,255,0.08)" }}
+                >
+                  <ZaloIcon size={16} />
+                </a>
+
+                <a
+                  href="https://maps.google.com/?q=135/9+KP+Tan+Phu+2+Tan+Dong+Hiep+Ho+Chi+Minh"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded-lg flex items-center justify-center text-blue-300 hover:text-white hover:bg-blue-700 transition-all"
+                  style={{ backgroundColor: "rgba(255,255,255,0.08)" }}
+                >
+                  <MapPin size={16} />
+                </a>
               </div>
             </div>
 
-            {/* Products */}
-            <div>
-              <h4
-                className="text-white mb-4"
-                style={{
-                  fontSize: "14px",
-                  fontWeight: 700,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.06em",
-                }}
-              >
+            {/* ── Sản phẩm ───────────────────────── */}
+            <div className="lg:col-span-2">
+              <h4 className="text-white mb-4 text-sm font-bold uppercase tracking-wider">
                 Sản phẩm
               </h4>
               <ul className="space-y-2">
                 {productLinks.map((link) => (
-                  <li key={link}>
-                    <a
-                      href="#"
-                      className="flex items-center gap-1.5 text-blue-200 hover:text-white transition-colors group"
-                      style={{ fontSize: "13px" }}
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="flex items-center gap-2 text-blue-200 hover:text-white transition-colors group text-sm"
                     >
                       <ArrowRight
-                        size={11}
-                        className="group-hover:translate-x-0.5 transition-transform opacity-50 group-hover:opacity-100"
+                        size={12}
+                        className="opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all"
                       />
-                      {link}
-                    </a>
+                      {link.label}
+                    </Link>
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* Services */}
-            <div>
-              <h4
-                className="text-white mb-4"
-                style={{
-                  fontSize: "14px",
-                  fontWeight: 700,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.06em",
-                }}
-              >
+            {/* ── Dịch vụ ───────────────────────── */}
+            <div className="lg:col-span-2">
+              <h4 className="text-white mb-4 text-sm font-bold uppercase tracking-wider">
                 Dịch vụ
               </h4>
               <ul className="space-y-2">
                 {serviceLinks.map((link) => (
-                  <li key={link}>
-                    <a
-                      href="#"
-                      className="flex items-center gap-1.5 text-blue-200 hover:text-white transition-colors group"
-                      style={{ fontSize: "13px" }}
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
+                      className="flex items-center gap-2 text-blue-200 hover:text-white transition-colors group text-sm"
                     >
                       <ArrowRight
-                        size={11}
-                        className="group-hover:translate-x-0.5 transition-transform opacity-50 group-hover:opacity-100"
+                        size={12}
+                        className="opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all"
                       />
-                      {link}
-                    </a>
+                      {link.label}
+                    </Link>
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* Contact */}
-            <div>
-              <h4
-                className="text-white mb-4"
-                style={{
-                  fontSize: "14px",
-                  fontWeight: 700,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.06em",
-                }}
-              >
+            {/* ── Liên hệ ───────────────────────── */}
+            <div className="lg:col-span-4">
+              <h4 className="text-white mb-4 text-sm font-bold uppercase tracking-wider">
                 Liên hệ
               </h4>
-              <div className="space-y-3 mb-5">
-                <div className="flex items-start gap-2.5">
+
+              <div className="space-y-4 mb-6 text-sm text-blue-200">
+                <div className="flex items-start gap-3">
                   <MapPin
-                    size={14}
-                    className="text-teal-400 mt-0.5 flex-shrink-0"
+                    size={16}
+                    className="text-teal-400 mt-1 flex-shrink-0"
                   />
-                  <span
-                    className="text-blue-200"
-                    style={{ fontSize: "13px", lineHeight: 1.6 }}
-                  >
-                    Số 1 Đại Cồ Việt, Hai Bà Trưng, Hà Nội
+                  <span>
+                    135/9 KP Tân Phú 2, P. Tân Đông Hiệp,
                     <br />
-                    28 Nguyễn Thị Minh Khai, Q.1, TP.HCM
+                    TP. Hồ Chí Minh
                   </span>
                 </div>
+
                 <a
-                  href="tel:18001234"
-                  className="flex items-center gap-2.5 text-blue-200 hover:text-white transition-colors"
+                  href="tel:0983498177"
+                  className="flex items-center gap-3 hover:text-white transition-colors"
                 >
-                  <Phone size={14} className="text-teal-400 flex-shrink-0" />
-                  <div>
-                    <span
-                      className="text-white font-bold"
-                      style={{ fontSize: "15px" }}
-                    >
-                      1800 1234
-                    </span>
-                    <span
-                      className="text-blue-300 ml-2"
-                      style={{ fontSize: "11px" }}
-                    >
-                      (miễn phí 24/7)
-                    </span>
-                  </div>
+                  <Phone size={16} className="text-teal-400 flex-shrink-0" />
+                  <span className="font-semibold text-white">0983.498.177</span>
                 </a>
+
                 <a
-                  href="mailto:info@medprovn.com"
-                  className="flex items-center gap-2.5 text-blue-200 hover:text-white transition-colors"
+                  href="mailto:huucong2510@gmail.com"
+                  className="flex items-center gap-3 hover:text-white transition-colors"
                 >
-                  <Mail size={14} className="text-teal-400 flex-shrink-0" />
-                  <span style={{ fontSize: "13px" }}>info@medprovn.com</span>
+                  <Mail size={16} className="text-teal-400 flex-shrink-0" />
+                  <span>huucong2510@gmail.com</span>
                 </a>
               </div>
 
               {/* Newsletter */}
-              <div>
-                <p
-                  className="text-blue-300 mb-2"
-                  style={{ fontSize: "12px", fontWeight: 600 }}
+              <p className="text-blue-300 text-xs font-semibold mb-2">
+                Nhận bảng giá mới nhất:
+              </p>
+              <div className="flex">
+                <input
+                  type="email"
+                  placeholder="Email của bạn..."
+                  className="flex-1 px-3 py-2 rounded-l-lg bg-blue-900 border border-blue-700 text-white placeholder-blue-400 focus:outline-none focus:border-teal-500 text-xs"
+                />
+                <button
+                  className="px-4 py-2 rounded-r-lg text-white font-semibold hover:opacity-90 transition-all text-xs"
+                  style={{ backgroundColor: "#00897B" }}
                 >
-                  Nhận tin tức mới nhất:
-                </p>
-                <div className="flex">
-                  <input
-                    type="email"
-                    placeholder="Email của bạn..."
-                    className="flex-1 px-3 py-2 rounded-l-lg bg-blue-900 border border-blue-700 text-white placeholder-blue-400 focus:outline-none focus:border-teal-500 text-xs"
-                    style={{ fontSize: "12px" }}
-                  />
-                  <button
-                    className="px-3 py-2 rounded-r-lg text-white text-xs font-semibold transition-all hover:opacity-90"
-                    style={{ backgroundColor: "#00897B", fontSize: "12px" }}
-                  >
-                    Đăng ký
-                  </button>
-                </div>
+                  Gửi
+                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Bottom bar */}
+      {/* ── Bottom Bar ───────────────────────── */}
       <div style={{ backgroundColor: "#071B4E" }}>
-        <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <p className="text-blue-400" style={{ fontSize: "12px" }}>
-            © 2026 MedPro Việt Nam. Mọi quyền được bảo lưu.
+        <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-blue-400">
+          <p>
+            © {new Date().getFullYear()} Công ty TNHH TM & SX Ánh Dương Phát ·
+            Mã số thuế: 3702929454
           </p>
           <div className="flex gap-4">
-            {[
-              "Chính sách bảo mật",
-              "Điều khoản sử dụng",
-              "Chính sách đổi trả",
-            ].map((link) => (
-              <a
-                key={link}
-                href="#"
-                className="text-blue-400 hover:text-white transition-colors"
-                style={{ fontSize: "12px" }}
-              >
-                {link}
-              </a>
-            ))}
+            <a href="#" className="hover:text-white transition-colors">
+              Chính sách bảo mật
+            </a>
+            <a href="#" className="hover:text-white transition-colors">
+              Điều khoản sử dụng
+            </a>
+            <a href="#" className="hover:text-white transition-colors">
+              Chính sách đổi trả
+            </a>
           </div>
         </div>
       </div>

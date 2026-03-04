@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useState } from "react";
 import {
   Phone,
@@ -13,7 +13,7 @@ export function CTABanner() {
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({ name: "", phone: "", product: "" });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
     if (form.name && form.phone) {
       setSubmitted(true);
@@ -140,7 +140,7 @@ export function CTABanner() {
                     letterSpacing: "0.03em",
                   }}
                 >
-                  1800 1234
+                  0983 498 177
                 </p>
               </div>
             </a>

@@ -4,7 +4,6 @@ import { FeaturedProducts } from "@/components/features/FeaturedProducts";
 import { HeroSection } from "@/components/features/HeroSection";
 import { SiteFooter } from "@/components/features/SiteFooter";
 import { SiteHeader } from "@/components/features/SiteHeader";
-import { StatsBar } from "@/components/features/StatsBar";
 import { TestimonialsSection } from "@/components/features/TestimonialsSection";
 
 export default function Home() {
@@ -13,7 +12,6 @@ export default function Home() {
       <SiteHeader />
       <main>
         <HeroSection />
-        <StatsBar />
         <CategoriesSection />
         <FeaturedProducts />
         <BrandsSection />

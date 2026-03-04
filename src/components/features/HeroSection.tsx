@@ -4,52 +4,52 @@ import {
   ChevronLeft,
   ChevronRight,
   Phone,
-  FileText,
-  CheckCircle,
-  Shield,
-  Award,
+  Package,
+  Truck,
+  FileCheck,
+  ShieldCheck,
 } from "lucide-react";
 
 const slides = [
   {
     id: 1,
-    badge: "Đối tác chính hãng #1 tại Việt Nam",
-    headline: "Thiết Bị Y Tế\nChuyên Nghiệp",
+    badge: "Cung cấp vật tư y tế tại TP. Hồ Chí Minh",
+    headline: "Vật Tư Y Tế\nTiêu Hao",
     highlight: "Chính Hãng",
-    sub: "Cung cấp đầy đủ vật tư, thiết bị y tế chính hãng cho 500+ bệnh viện và phòng khám trên toàn quốc.",
-    cta1: "Nhận tư vấn miễn phí",
-    cta2: "Xem danh mục sản phẩm",
-    img: "https://images.unsplash.com/photo-1758691462848-ba1e929da259?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBob3NwaXRhbCUyMG1lZGljYWwlMjBlcXVpcG1lbnQlMjBwcm9mZXNzaW9uYWx8ZW58MXx8fHwxNzcyMjExMzc0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+    sub: "Cung cấp đa dạng vật tư tiêu hao y tế cho bệnh viện, phòng khám và cơ sở y tế. Hàng chính hãng, đầy đủ hóa đơn GTGT.",
+    cta1: "Liên hệ báo giá",
+    cta2: "Xem danh mục",
+    img: "https://images.unsplash.com/photo-1747987766141-9d1f2707dd6c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
     accent: "#00897B",
   },
   {
     id: 2,
-    badge: "Dịch vụ bảo trì & bảo hành toàn quốc",
-    headline: "Vật Tư Tiêu Hao\nĐạt Chuẩn",
-    highlight: "ISO & CE",
-    sub: "Nguồn cung ổn định, giá cạnh tranh, giao hàng nhanh chóng. Đầy đủ CO/CQ cho mọi sản phẩm.",
-    cta1: "Yêu cầu báo giá",
-    cta2: "Tìm hiểu thêm",
-    img: "https://images.unsplash.com/photo-1766325693728-348c38374d33?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtZWRpY2FsJTIwc3VwcGxpZXMlMjBzdGV0aG9zY29wZSUyMGRvY3RvciUyMHRvb2xzfGVufDF8fHx8MTc3MjIxMTM3NHww&ixlib=rb-4.1.0&q=80&w=1080",
+    badge: "Phân phối vật tư chỉnh hình",
+    headline: "Vật Tư\nChỉnh Hình",
+    highlight: "& Phục Hồi",
+    sub: "Băng bó bột, xe lăn, nạng, vớ tĩnh mạch và các vật tư chỉnh hình từ các thương hiệu uy tín Hàn Quốc, Bồ Đào Nha, Việt Nam.",
+    cta1: "Liên hệ báo giá",
+    cta2: "Xem sản phẩm",
+    img: "https://images.unsplash.com/photo-1671108503276-1d3d5ab23a3a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
     accent: "#1565C0",
   },
   {
     id: 3,
-    badge: "Hỗ trợ kỹ thuật 24/7",
-    headline: "Giải Pháp Y Tế\nToàn Diện",
-    highlight: "Cho Bệnh Viện",
-    sub: "Từ thiết bị chẩn đoán, phẫu thuật đến phòng ICU — chúng tôi cung cấp giải pháp trọn gói với đội ngũ kỹ thuật chuyên sâu.",
-    cta1: "Liên hệ ngay",
-    cta2: "Xem dự án tiêu biểu",
-    img: "https://images.unsplash.com/photo-1580281657702-257584239a55?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxob3NwaXRhbCUyMHdhcmQlMjBtZWRpY2FsJTIwdGVjaG5vbG9neSUyMGRldmljZXN8ZW58MXx8fHwxNzcyMjExMzc1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+    badge: "Giấy in y tế & vật tư văn phòng",
+    headline: "Giấy In\nY Tế",
+    highlight: "Các Loại",
+    sub: "Giấy điện tim, giấy in siêu âm, giấy in bill và các vật tư văn phòng y tế. Giao hàng nhanh 2–3 ngày trong toàn quốc.",
+    cta1: "Liên hệ báo giá",
+    cta2: "Xem sản phẩm",
+    img: "https://images.unsplash.com/photo-1768498950637-88d073faa491?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
     accent: "#7B1FA2",
   },
 ];
 
 const trustBadges = [
-  { icon: <Shield size={14} />, text: "ISO 9001:2015" },
-  { icon: <CheckCircle size={14} />, text: "CE Certified" },
-  { icon: <Award size={14} />, text: "Top Brand 2024" },
+  { icon: <ShieldCheck size={14} />, text: "Hàng chính hãng 100%" },
+  { icon: <FileCheck size={14} />, text: "Có hóa đơn GTGT" },
+  { icon: <Truck size={14} />, text: "Giao hàng 2–3 ngày" },
 ];
 
 export function HeroSection() {
@@ -79,9 +79,7 @@ export function HeroSection() {
   return (
     <section
       className="relative w-full overflow-hidden"
-      style={{
-        height: "clamp(620px, 85vh, 560px)",
-      }}
+      style={{ height: "clamp(560px, 85vh, 640px)" }}
     >
       {/* Background image */}
       <div
@@ -98,7 +96,7 @@ export function HeroSection() {
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(105deg, rgba(13,43,110,0.92) 0%, rgba(13,43,110,0.75) 45%, rgba(13,43,110,0.25) 100%)",
+            "linear-gradient(105deg, rgba(13,43,110,0.92) 0%, rgba(13,43,110,0.75) 45%, rgba(13,43,110,0.20) 100%)",
         }}
       />
 
@@ -162,7 +160,7 @@ export function HeroSection() {
           {/* CTAs */}
           <div className="flex flex-wrap gap-3 mb-8">
             <a
-              href="#contact"
+              href="tel:0983498177"
               className="flex items-center gap-2 px-6 py-3.5 rounded-lg text-white font-semibold transition-all hover:opacity-90 hover:scale-105 active:scale-95"
               style={{
                 backgroundColor: slide.accent,
@@ -182,7 +180,7 @@ export function HeroSection() {
                 fontSize: "14px",
               }}
             >
-              <FileText size={15} />
+              <Package size={15} />
               {slide.cta2}
             </a>
           </div>
@@ -214,40 +212,45 @@ export function HeroSection() {
           style={{ opacity: animating ? 0.7 : 1, transition: "opacity 0.4s" }}
         >
           <p
-            className="text-gray-800 mb-4"
+            className="text-gray-800 mb-1"
             style={{ fontSize: "15px", fontWeight: 700 }}
           >
-            🩺 Yêu cầu tư vấn nhanh
+            📋 Yêu cầu báo giá nhanh
+          </p>
+          <p className="text-gray-400 mb-4" style={{ fontSize: "12px" }}>
+            Phản hồi trong giờ hành chính
           </p>
           <div className="space-y-3">
             <input
               type="text"
               placeholder="Họ và tên"
-              className="w-full px-3 py-2.5 border border-gray-200 rounded-lg bg-gray-50 text-sm focus:outline-none focus:border-blue-400 transition-all"
+              className="w-full px-3 py-2.5 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:border-teal-500 transition-all"
               style={{ fontSize: "13px" }}
             />
             <input
               type="tel"
-              placeholder="Số điện thoại"
-              className="w-full px-3 py-2.5 border border-gray-200 rounded-lg bg-gray-50 text-sm focus:outline-none focus:border-blue-400 transition-all"
+              placeholder="Số điện thoại / Zalo"
+              className="w-full px-3 py-2.5 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:border-teal-500 transition-all"
               style={{ fontSize: "13px" }}
             />
             <select
-              className="w-full px-3 py-2.5 border border-gray-200 rounded-lg bg-gray-50 text-gray-600 focus:outline-none focus:border-blue-400 transition-all"
+              className="w-full px-3 py-2.5 border border-gray-200 rounded-lg bg-gray-50 text-gray-600 focus:outline-none focus:border-teal-500 transition-all"
               style={{ fontSize: "13px" }}
             >
-              <option>Chọn sản phẩm quan tâm</option>
-              <option>Thiết bị chẩn đoán</option>
-              <option>Dụng cụ phẫu thuật</option>
-              <option>Thiết bị ICU</option>
+              <option value="">-- Danh mục sản phẩm --</option>
               <option>Vật tư tiêu hao</option>
+              <option>Vật tư chỉnh hình</option>
+              <option>Giấy in y tế</option>
+              <option>Khác</option>
             </select>
-            <button
-              className="w-full py-3 rounded-lg text-white font-semibold transition-all hover:opacity-90"
+            <a
+              href="tel:0983498177"
+              className="w-full py-3 rounded-lg text-white font-semibold transition-all hover:opacity-90 flex items-center justify-center gap-2"
               style={{ backgroundColor: "#00897B", fontSize: "13px" }}
             >
-              Gửi yêu cầu tư vấn →
-            </button>
+              <Phone size={13} />
+              Gọi ngay: 0983.498.177
+            </a>
           </div>
           <p
             className="text-center text-gray-400 mt-3"

@@ -104,6 +104,7 @@ export function WhyUsSection() {
                 { val: "1.200+", label: "Sản phẩm" },
                 { val: "15 năm", label: "Kinh nghiệm" },
               ].map((item, i) => (
+                // eslint-disable-next-line react/no-array-index-key
                 <div key={i} className="text-center">
                   <div
                     className="font-black"
@@ -131,6 +132,7 @@ export function WhyUsSection() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {features.map((feat, i) => (
               <div
+                // eslint-disable-next-line react/no-array-index-key
                 key={i}
                 className="rounded-xl p-4 border-2 hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 cursor-default"
                 style={{

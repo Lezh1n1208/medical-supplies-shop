@@ -2,18 +2,24 @@
 import { useEffect, useRef } from "react";
 
 const brands = [
-  { name: "Siemens Healthineers", abbr: "SIEMENS", color: "#009999" },
-  { name: "Philips Healthcare", abbr: "PHILIPS", color: "#0B5ED7" },
-  { name: "GE Healthcare", abbr: "GE", color: "#00338D" },
-  { name: "Mindray", abbr: "MINDRAY", color: "#0066CC" },
-  { name: "Medtronic", abbr: "MEDTRONIC", color: "#C41230" },
-  { name: "BD Medical", abbr: "BD", color: "#00338D" },
-  { name: "3M Healthcare", abbr: "3M", color: "#FF0000" },
-  { name: "Abbott", abbr: "ABBOTT", color: "#004C97" },
-  { name: "Stryker", abbr: "STRYKER", color: "#FFB400" },
-  { name: "Biocare", abbr: "BIOCARE", color: "#00897B" },
-  { name: "Fisher & Paykel", abbr: "F&P", color: "#005BAA" },
-  { name: "Aesculap", abbr: "AESCULAP", color: "#003087" },
+  { name: "B. Braun", abbr: "B.BRAUN", sub: "Việt Nam", color: "#005BAA" },
+  { name: "Medtronic", abbr: "MEDTRONIC", sub: "Mỹ", color: "#C41230" },
+  { name: "Omron", abbr: "OMRON", sub: "Nhật Bản", color: "#CC0000" },
+  { name: "Johnson & Johnson", abbr: "J&J", sub: "Ireland", color: "#CC0000" },
+  { name: "Gima", abbr: "GIMA", sub: "Ý", color: "#003087" },
+  { name: "Eurofarm", abbr: "EUROFARM", sub: "Italia", color: "#007A33" },
+  { name: "Greetmed", abbr: "GREETMED", sub: "Trung Quốc", color: "#0066CC" },
+  { name: "Microlife", abbr: "MICROLIFE", sub: "Thụy Sĩ", color: "#E30613" },
+  { name: "Altochem", abbr: "ALTOCHEM", sub: "Hàn Quốc", color: "#1A5276" },
+  { name: "Bastos", abbr: "BASTOS", sub: "Hàn Quốc", color: "#2E86C1" },
+  { name: "Noamed", abbr: "NOAMED", sub: "Thổ Nhĩ Kỳ", color: "#1E8449" },
+  { name: "Acare", abbr: "ACARE", sub: "Đài Loan", color: "#0097A7" },
+  { name: "Innoplast", abbr: "INNOPLAST", sub: "Thái Lan", color: "#E65100" },
+  { name: "Anios", abbr: "ANIOS", sub: "Pháp", color: "#6A1B9A" },
+  { name: "Sonomed", abbr: "SONOMED", sub: "Malaysia", color: "#00695C" },
+  { name: "Sony", abbr: "SONY", sub: "Nhật Bản", color: "#000000" },
+  { name: "Tecfen Medical", abbr: "TECFEN", sub: "Đức", color: "#1565C0" },
+  { name: "ALPK2", abbr: "ALPK2", sub: "Nhật Bản", color: "#C62828" },
 ];
 
 export function BrandsSection() {
@@ -22,6 +28,7 @@ export function BrandsSection() {
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
+
     let x = 0;
     const speed = 0.5;
     let raf: number;
@@ -33,12 +40,14 @@ export function BrandsSection() {
       track.style.transform = `translateX(-${x}px)`;
       raf = requestAnimationFrame(animate);
     };
+
     raf = requestAnimationFrame(animate);
 
     const stop = () => cancelAnimationFrame(raf);
     const resume = () => {
       raf = requestAnimationFrame(animate);
     };
+
     track.addEventListener("mouseenter", stop);
     track.addEventListener("mouseleave", resume);
 
@@ -68,13 +77,14 @@ export function BrandsSection() {
                 letterSpacing: "0.08em",
               }}
             >
-              Đối tác chính hãng
+              Thương hiệu phân phối
             </span>
             <div
               className="w-8 h-1 rounded-full"
               style={{ backgroundColor: "#1565C0" }}
             />
           </div>
+
           <h2
             className="text-gray-900"
             style={{
@@ -82,10 +92,12 @@ export function BrandsSection() {
               fontWeight: 800,
             }}
           >
-            Thương Hiệu Phân Phối Chính Thức
+            Sản Phẩm Chính Hãng Từ Các Thương Hiệu Uy Tín
           </h2>
-          <p className="text-gray-500 mt-1" style={{ fontSize: "14px" }}>
-            Đối tác ủy quyền của hơn 50 thương hiệu y tế hàng đầu thế giới
+
+          <p className="text-gray-500 mt-1 text-sm">
+            Hàng nhập khẩu trực tiếp từ nhà sản xuất, đầy đủ CO/CQ và hóa đơn
+            GTGT
           </p>
         </div>
       </div>
@@ -103,43 +115,46 @@ export function BrandsSection() {
           className="flex gap-4 w-max"
           style={{ willChange: "transform" }}
         >
-          {allBrands.map((brand, i) => (
-            <div
-              key={i}
-              className="flex-shrink-0 flex items-center justify-center rounded-xl border border-gray-200 bg-white hover:border-blue-300 hover:shadow-md transition-all cursor-pointer group"
-              style={{ width: "140px", height: "72px", padding: "12px 16px" }}
-            >
-              <div className="text-center">
-                <div
-                  className="font-black transition-all group-hover:scale-105"
-                  style={{
-                    fontSize: brand.abbr.length > 6 ? "10px" : "14px",
-                    color: "#9CA3AF",
-                    letterSpacing: "0.05em",
-                    filter: "grayscale(1) opacity(0.6)",
-                    transition: "all 0.2s",
-                  }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.color = brand.color;
-                    (e.currentTarget as HTMLElement).style.filter = "none";
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.color = "#9CA3AF";
-                    (e.currentTarget as HTMLElement).style.filter =
-                      "grayscale(1) opacity(0.6)";
-                  }}
-                >
-                  {brand.abbr}
+          {allBrands.map((brand, index) => {
+            let fontSize = "14px";
+
+            if (brand.abbr.length > 7) {
+              fontSize = "9px";
+            } else if (brand.abbr.length > 5) {
+              fontSize = "11px";
+            }
+
+            return (
+              <button
+                key={`${brand.name}-${brand.abbr}-${index}`}
+                type="button"
+                aria-label={`Thương hiệu ${brand.name} - ${brand.sub}`}
+                className="flex-shrink-0 flex items-center justify-center rounded-xl border border-gray-200 bg-white hover:border-blue-300 hover:shadow-md transition-all cursor-pointer group focus:outline-none focus:ring-2 focus:ring-blue-500"
+                style={{
+                  width: "148px",
+                  height: "72px",
+                  padding: "12px 16px",
+                }}
+              >
+                <div className="text-center">
+                  <div
+                    className="font-black transition-all duration-200 group-hover:scale-105 group-hover:grayscale-0 group-hover:opacity-100"
+                    style={{
+                      fontSize,
+                      color: "#9CA3AF",
+                      letterSpacing: "0.05em",
+                    }}
+                  >
+                    {brand.abbr}
+                  </div>
+
+                  <div className="text-gray-400 leading-tight mt-0.5 text-[9px]">
+                    {brand.name} · {brand.sub}
+                  </div>
                 </div>
-                <div
-                  className="text-gray-400 leading-tight mt-0.5"
-                  style={{ fontSize: "9px" }}
-                >
-                  {brand.name.replace(brand.abbr, "").trim()}
-                </div>
-              </div>
-            </div>
-          ))}
+              </button>
+            );
+          })}
         </div>
       </div>
     </section>

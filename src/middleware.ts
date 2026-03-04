@@ -1,23 +1,59 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
+const ADMIN_SECRET = process.env.ADMIN_SECRET!;
+
+function bufferToHex(buffer: ArrayBuffer) {
+  return [...new Uint8Array(buffer)]
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+async function sign(value: string) {
+  const encoder = new TextEncoder();
+
+  const key = await crypto.subtle.importKey(
+    "raw",
+    encoder.encode(ADMIN_SECRET),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"],
+  );
+
+  const signature = await crypto.subtle.sign(
+    "HMAC",
+    key,
+    encoder.encode(value),
+  );
+
+  return bufferToHex(signature);
+}
+
+async function verifyAdminSession(cookieValue?: string) {
+  if (!cookieValue) return false;
+
+  const [payload, signature] = cookieValue.split(".");
+  if (!payload || !signature) return false;
+
+  const expected = await sign(payload);
+
+  return signature === expected;
+}
+
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Protect admin pages
-  if (pathname.startsWith("/admin") && !pathname.startsWith("/admin/login")) {
-    const session = request.cookies.get("admin_session");
+  const session = request.cookies.get("admin_session")?.value;
+  const isValid = await verifyAdminSession(session);
 
-    if (!session) {
+  if (pathname.startsWith("/admin") && !pathname.startsWith("/admin/login")) {
+    if (!isValid) {
       return NextResponse.redirect(new URL("/admin/login", request.url));
     }
   }
 
-  // Protect admin API
   if (pathname.startsWith("/api/admin")) {
-    const session = request.cookies.get("admin_session");
-
-    if (!session) {
+    if (!isValid) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
   }
