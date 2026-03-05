@@ -17,21 +17,6 @@ const serviceLinks = [
   { label: "Giao hàng toàn quốc", href: "/dich-vu" },
 ];
 
-// ── Zalo SVG ────────────────────────────────────────────
-function ZaloIcon({ size = 16 }: { readonly size?: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      aria-hidden="true"
-    >
-      <path d="M12 2C6.477 2 2 6.254 2 11.5c0 2.7 1.17 5.132 3.05 6.87L4 22l3.75-1.268C9.097 21.538 10.517 22 12 22c5.523 0 10-4.254 10-9.5S17.523 2 12 2zm-1.07 5.5h1.46v4.17l3.01-4.17h1.68l-3.2 4.33 3.38 4.67h-1.77l-3.1-4.35v4.35h-1.46V7.5zm-3.68.93c.39 0 .71.32.71.71v5.72a.71.71 0 01-1.42 0V9.14c0-.39.32-.71.71-.71z" />
-    </svg>
-  );
-}
-
 // ── Component ───────────────────────────────────────────
 
 export function SiteFooter() {
@@ -90,14 +75,14 @@ export function SiteFooter() {
                   className="w-9 h-9 rounded-lg flex items-center justify-center text-blue-300 hover:text-white hover:bg-blue-700 transition-all"
                   style={{ backgroundColor: "rgba(255,255,255,0.08)" }}
                 >
-                  <svg
-                    width={16}
-                    height={16}
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                  >
-                    <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
-                  </svg>
+                  <Image
+                    src="/social/facebook.png"
+                    alt="Facebook"
+                    width={18}
+                    height={18}
+                    className="object-contain"
+                    unoptimized
+                  />
                 </a>
 
                 <a
@@ -107,7 +92,14 @@ export function SiteFooter() {
                   className="w-9 h-9 rounded-lg flex items-center justify-center text-blue-300 hover:text-white hover:bg-blue-700 transition-all"
                   style={{ backgroundColor: "rgba(255,255,255,0.08)" }}
                 >
-                  <ZaloIcon size={16} />
+                  <Image
+                    src="/social/zalo.png"
+                    alt="Zalo"
+                    width={18}
+                    height={18}
+                    className="object-contain"
+                    unoptimized
+                  />
                 </a>
 
                 <a
@@ -117,7 +109,14 @@ export function SiteFooter() {
                   className="w-9 h-9 rounded-lg flex items-center justify-center text-blue-300 hover:text-white hover:bg-blue-700 transition-all"
                   style={{ backgroundColor: "rgba(255,255,255,0.08)" }}
                 >
-                  <MapPin size={16} />
+                  <Image
+                    src="/social/google-maps.png"
+                    alt="Google Maps"
+                    width={18}
+                    height={18}
+                    className="object-contain"
+                    unoptimized
+                  />
                 </a>
               </div>
             </div>
