@@ -187,7 +187,7 @@ export function ProductCard({
             style={{ backgroundColor: "#00897B", fontSize: "12px" }}
           >
             <ShoppingCart size={12} />
-            Thêm vào giỏ hàng
+            Đặt mua
           </button>
         )}
       </div>
