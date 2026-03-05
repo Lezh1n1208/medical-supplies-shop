@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Image from "next/image";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 interface ContactItem {
@@ -9,55 +10,7 @@ interface ContactItem {
   href: string;
   color: string;
   ripple: string;
-  icon: React.ReactNode;
-}
-
-// ── SVG Icons ────────────────────────────────────────────────────────────────
-function FacebookIcon() {
-  return (
-    <svg
-      width={22}
-      height={22}
-      viewBox="0 0 24 24"
-      fill="white"
-      aria-hidden="true"
-    >
-      <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
-    </svg>
-  );
-}
-
-function ZaloIcon() {
-  return (
-    <svg
-      width={22}
-      height={22}
-      viewBox="0 0 24 24"
-      fill="white"
-      aria-hidden="true"
-    >
-      <path d="M12 2C6.477 2 2 6.254 2 11.5c0 2.7 1.17 5.132 3.05 6.87L4 22l3.75-1.268C9.097 21.538 10.517 22 12 22c5.523 0 10-4.254 10-9.5S17.523 2 12 2zm-1.07 5.5h1.46v4.17l3.01-4.17h1.68l-3.2 4.33 3.38 4.67h-1.77l-3.1-4.35v4.35h-1.46V7.5zm-3.68.93c.39 0 .71.32.71.71v5.72a.71.71 0 01-1.42 0V9.14c0-.39.32-.71.71-.71z" />
-    </svg>
-  );
-}
-
-function MapPinIcon() {
-  return (
-    <svg
-      width={22}
-      height={22}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="white"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
-      <circle cx="12" cy="10" r="3" />
-    </svg>
-  );
+  iconSrc: string;
 }
 
 // ── Data ─────────────────────────────────────────────────────────────────────
@@ -69,7 +22,7 @@ const contacts: ContactItem[] = [
     href: "https://facebook.com",
     color: "#1877F2",
     ripple: "rgba(24,119,242,0.35)",
-    icon: <FacebookIcon />,
+    iconSrc: "/social/facebook.png",
   },
   {
     id: "zalo",
@@ -78,7 +31,7 @@ const contacts: ContactItem[] = [
     href: "https://zalo.me/0983498177",
     color: "#0068FF",
     ripple: "rgba(0,104,255,0.35)",
-    icon: <ZaloIcon />,
+    iconSrc: "/social/zalo.png",
   },
   {
     id: "maps",
@@ -87,7 +40,7 @@ const contacts: ContactItem[] = [
     href: "https://maps.google.com/?q=135/9+KP+Tan+Phu+2+Tan+Dong+Hiep+Ho+Chi+Minh",
     color: "#EA4335",
     ripple: "rgba(234,67,53,0.35)",
-    icon: <MapPinIcon />,
+    iconSrc: "/social/google-maps.png",
   },
 ];
 
@@ -218,7 +171,15 @@ export function FloatingContacts() {
                   zIndex: 1,
                 }}
               >
-                {c.icon}
+                <Image
+                  src={c.iconSrc}
+                  alt={c.label}
+                  width={50}
+                  height={50}
+                  className="object-contain"
+                  style={{ padding: "4px" }}
+                  unoptimized
+                />
               </a>
             </div>
           </div>
