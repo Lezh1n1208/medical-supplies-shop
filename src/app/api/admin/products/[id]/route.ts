@@ -1,3 +1,4 @@
+import { handleError } from "@/app/api/handle-error";
 import { ProductAdminService } from "@/services/product.admin.service";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -9,7 +10,7 @@ export async function GET(_req: NextRequest, { params }: Params) {
     const product = await ProductAdminService.getById(params.id);
     return NextResponse.json({ product });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    handleError(err);
   }
 }
 
@@ -35,19 +36,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     const product = await ProductAdminService.update(params.id, raw, files);
     return NextResponse.json({ product });
   } catch (err: any) {
-    if (err.code === "VALIDATION_ERROR") {
-      return NextResponse.json(
-        { error: err.message, details: err.details },
-        { status: 422 },
-      );
-    }
-    if (err.name === "ZodError") {
-      return NextResponse.json(
-        { error: "Invalid product data", details: err.errors },
-        { status: 422 },
-      );
-    }
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    handleError(err);
   }
 }
 
@@ -57,6 +46,6 @@ export async function DELETE(_req: NextRequest, { params }: Params) {
     await ProductAdminService.delete(params.id);
     return NextResponse.json({ success: true });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    handleError(err);
   }
 }

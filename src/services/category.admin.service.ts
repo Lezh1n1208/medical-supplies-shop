@@ -1,3 +1,4 @@
+import { validateUploadFiles } from "@/lib/cloudinary/upload-validation";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { assertNoError } from "@/lib/supabase/assert";
 import {
@@ -5,6 +6,7 @@ import {
   CreateCategorySchema,
   UpdateCategorySchema,
 } from "@/schemas/category.schema";
+import { CloudinaryService } from "./cloudinary.service";
 
 /* ========================
    SERVICE
@@ -31,9 +33,40 @@ export class CategoryAdminService {
     return CategorySchema.parse(data);
   }
 
-  static async create(data: unknown) {
-    const parsed = CreateCategorySchema.parse(data);
+  static async create(data: unknown, thumbnail?: File) {
+    // 1. Upload thumbnail trước nếu có — để nếu lỗi thì không tạo category
+    let thumbnailData: {
+      thumbnail_url: string;
+      thumbnail_public_id: string;
+    } | null = null;
 
+    if (thumbnail) {
+      const validation = validateUploadFiles([thumbnail]);
+      if (!validation.valid) {
+        throw Object.assign(new Error("Validation failed"), {
+          code: "VALIDATION_ERROR",
+          details: validation.errors,
+        });
+      }
+
+      const uploaded = await CloudinaryService.uploadBuffer(
+        Buffer.from(await thumbnail.arrayBuffer()),
+        { folder: "categories" },
+      );
+
+      thumbnailData = {
+        thumbnail_url: uploaded.secure_url,
+        thumbnail_public_id: uploaded.public_id,
+      };
+    }
+
+    // 2. Parse + merge thumbnail vào data
+    const parsed = CreateCategorySchema.parse({
+      ...(data as Record<string, unknown>),
+      ...thumbnailData,
+    });
+
+    // 3. Insert
     const { data: result, error } = await supabaseAdmin
       .from("categories")
       .insert(parsed)
@@ -44,9 +77,52 @@ export class CategoryAdminService {
     return CategorySchema.parse(result);
   }
 
-  static async update(id: string, data: unknown) {
-    const parsed = UpdateCategorySchema.parse(data);
+  static async update(id: string, data: unknown, thumbnail?: File) {
+    // 1. Upload thumbnail mới nếu có
+    let thumbnailData: {
+      thumbnail_url: string;
+      thumbnail_public_id: string;
+    } | null = null;
 
+    if (thumbnail) {
+      const validation = validateUploadFiles([thumbnail]);
+      if (!validation.valid) {
+        throw Object.assign(new Error("Validation failed"), {
+          code: "VALIDATION_ERROR",
+          details: validation.errors,
+        });
+      }
+
+      // Lấy public_id cũ để xóa sau khi upload mới thành công
+      const { data: existing } = await supabaseAdmin
+        .from("categories")
+        .select("thumbnail_public_id")
+        .eq("id", id)
+        .single();
+
+      const uploaded = await CloudinaryService.uploadBuffer(
+        Buffer.from(await thumbnail.arrayBuffer()),
+        { folder: "categories" },
+      );
+
+      thumbnailData = {
+        thumbnail_url: uploaded.secure_url,
+        thumbnail_public_id: uploaded.public_id,
+      };
+
+      // Xóa ảnh cũ trên Cloudinary sau khi upload mới thành công
+      if (existing?.thumbnail_public_id) {
+        await CloudinaryService.delete(existing.thumbnail_public_id);
+      }
+    }
+
+    // 2. Parse + merge
+    const parsed = UpdateCategorySchema.parse({
+      ...(data as Record<string, unknown>),
+      ...thumbnailData,
+    });
+
+    // 3. Update
     const { data: result, error } = await supabaseAdmin
       .from("categories")
       .update(parsed)
@@ -59,12 +135,25 @@ export class CategoryAdminService {
   }
 
   static async delete(id: string) {
+    // Lấy thumbnail_public_id trước khi xóa
+    const { data: existing } = await supabaseAdmin
+      .from("categories")
+      .select("thumbnail_public_id")
+      .eq("id", id)
+      .single();
+
     const { error } = await supabaseAdmin
       .from("categories")
       .delete()
       .eq("id", id);
 
     assertNoError(error);
+
+    // Xóa ảnh trên Cloudinary sau khi xóa DB thành công
+    if (existing?.thumbnail_public_id) {
+      await CloudinaryService.delete(existing.thumbnail_public_id);
+    }
+
     return { success: true };
   }
 }

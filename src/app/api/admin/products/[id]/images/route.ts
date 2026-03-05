@@ -1,3 +1,4 @@
+import { handleError } from "@/app/api/handle-error";
 import { ProductImageAdminService } from "@/services/product-image.admin.service";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -18,6 +19,6 @@ export async function POST(req: NextRequest, { params }: Params) {
         { status: 422 },
       );
     }
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    handleError(err);
   }
 }
