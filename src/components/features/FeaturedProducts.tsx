@@ -10,8 +10,6 @@ const TABS = [
   "Mới nhất",
   "Bán chạy",
   "Khuyến mãi",
-  "Thiết bị chẩn đoán",
-  "Vật tư tiêu hao",
 ];
 
 const products: ProductCardData[] = [
@@ -197,7 +195,7 @@ export function FeaturedProducts() {
         {/* View all */}
         <div className="text-center mt-8">
           <Link
-            href="/san-pham"
+            href="/products"
             className="inline-flex items-center gap-2 px-8 py-3.5 rounded-lg border-2 font-semibold transition-all hover:bg-blue-50 hover:border-blue-400"
             style={{
               borderColor: "#1565C0",
