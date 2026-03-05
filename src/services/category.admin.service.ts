@@ -1,26 +1,42 @@
 import { supabaseAdmin } from "@/lib/supabase/admin";
-import { CategorySchema } from "@/schemas/category.schema";
-import { z } from "zod";
+import {
+  CategorySchema,
+  CreateCategorySchema,
+  UpdateCategorySchema,
+} from "@/schemas/category.schema";
 
 /* ========================
-   INPUT SCHEMAS
+   HELPER
 ======================== */
-
-export const CreateCategorySchema = z.object({
-  name: z.string(),
-  slug: z.string(),
-  display_order: z.number(),
-  thumbnail_url: z.string().nullable().optional(),
-  thumbnail_public_id: z.string().nullable().optional(),
-});
-
-export const UpdateCategorySchema = CreateCategorySchema.partial();
+function assertNoError(error: { message: string } | null): void {
+  if (error) throw new Error(error.message);
+}
 
 /* ========================
    SERVICE
 ======================== */
-
 export class CategoryAdminService {
+  static async getAll() {
+    const { data, error } = await supabaseAdmin
+      .from("categories")
+      .select()
+      .order("display_order", { ascending: true });
+
+    assertNoError(error);
+    return CategorySchema.array().parse(data);
+  }
+
+  static async getById(id: string) {
+    const { data, error } = await supabaseAdmin
+      .from("categories")
+      .select()
+      .eq("id", id)
+      .single();
+
+    assertNoError(error);
+    return CategorySchema.parse(data);
+  }
+
   static async create(data: unknown) {
     const parsed = CreateCategorySchema.parse(data);
 
@@ -30,8 +46,7 @@ export class CategoryAdminService {
       .select()
       .single();
 
-    if (error) throw new Error(error.message);
-
+    assertNoError(error);
     return CategorySchema.parse(result);
   }
 
@@ -45,8 +60,7 @@ export class CategoryAdminService {
       .select()
       .single();
 
-    if (error) throw new Error(error.message);
-
+    assertNoError(error);
     return CategorySchema.parse(result);
   }
 
@@ -56,8 +70,7 @@ export class CategoryAdminService {
       .delete()
       .eq("id", id);
 
-    if (error) throw new Error(error.message);
-
+    assertNoError(error);
     return { success: true };
   }
 }

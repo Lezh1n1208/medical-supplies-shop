@@ -1,6 +1,45 @@
 import { createServerSupabase } from "@/lib/supabase/server";
-import { ProductResponseSchema } from "@/schemas/product.schema";
+import { ProductSchema } from "@/schemas/product.schema";
+import { z } from "zod";
 
+/* ========================
+   HELPER
+======================== */
+function assertNoError(error: { message: string } | null): void {
+  if (error) throw new Error(error.message);
+}
+
+/* ========================
+   RESPONSE SCHEMAS (view-specific, not part of DB schema)
+   Extend ProductSchema với các relation được join thêm
+======================== */
+const ProductCategorySchema = z.object({
+  name: z.string(),
+  slug: z.string(),
+});
+
+const ProductImageItemSchema = z.object({
+  image_url: z.url(),
+  is_thumbnail: z.boolean(),
+  sort_order: z.number().int().nonnegative(),
+});
+
+export const ProductListItemSchema = ProductSchema.extend({
+  categories: ProductCategorySchema.nullable(),
+  product_images: ProductImageItemSchema.omit({ sort_order: true }).array(),
+});
+
+export const ProductDetailSchema = ProductSchema.extend({
+  categories: ProductCategorySchema.nullable(),
+  product_images: ProductImageItemSchema.array(),
+});
+
+export type ProductListItem = z.infer<typeof ProductListItemSchema>;
+export type ProductDetail = z.infer<typeof ProductDetailSchema>;
+
+/* ========================
+   FILTERS
+======================== */
 export interface ProductFilters {
   search?: string;
   categorySlug?: string;
@@ -11,6 +50,9 @@ export interface ProductFilters {
   limit?: number;
 }
 
+/* ========================
+   SERVICE
+======================== */
 export class ProductPublicService {
   static async getBySlug(slug: string) {
     const supabase = await createServerSupabase();
@@ -27,9 +69,8 @@ export class ProductPublicService {
       .eq("slug", slug)
       .single();
 
-    if (error) throw new Error(error.message);
-
-    return ProductResponseSchema.parse(data);
+    assertNoError(error);
+    return ProductDetailSchema.parse(data);
   }
 
   static async list(filters: ProductFilters = {}) {
@@ -45,14 +86,19 @@ export class ProductPublicService {
       limit = 12,
     } = filters;
 
-    let query = supabase.from("products").select(
-      `
-        *,
-        categories(name, slug),
-        product_images(image_url, is_thumbnail)
-      `,
-      { count: "exact" },
-    );
+    // Dùng !inner khi filter theo categorySlug để Supabase
+    // áp đúng điều kiện WHERE trên bảng join.
+    // Nếu không có filter, dùng left join bình thường để không loại
+    // sản phẩm chưa có category.
+    const categoryJoin = categorySlug
+      ? "categories!inner(name, slug)"
+      : "categories(name, slug)";
+
+    let query = supabase
+      .from("products")
+      .select(`*, ${categoryJoin}, product_images(image_url, is_thumbnail)`, {
+        count: "exact",
+      });
 
     if (search) {
       query = query.textSearch("search_vector", search);
@@ -76,15 +122,14 @@ export class ProductPublicService {
 
     const from = (page - 1) * limit;
     const to = from + limit - 1;
-
     query = query.range(from, to);
 
     const { data, error, count } = await query;
 
-    if (error) throw new Error(error.message);
+    assertNoError(error);
 
     return {
-      items: data?.map((p) => ProductResponseSchema.parse(p)) ?? [],
+      items: ProductListItemSchema.array().parse(data),
       total: count ?? 0,
       page,
       limit,
