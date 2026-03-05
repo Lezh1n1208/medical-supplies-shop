@@ -7,7 +7,6 @@ import {
   ShoppingCart,
   Heart,
   ChevronDown,
-  ChevronRight,
   SlidersHorizontal,
   X,
   PackageX,
@@ -308,13 +307,8 @@ export default function ProductsPage() {
             fontSize: "13px",
           }}
         >
-          <span className="flex items-center gap-2">
-            <ChevronRight
-              size={12}
-              style={{ opacity: activeCategory === cat.slug ? 1 : 0.3 }}
-            />
-            {cat.label}
-          </span>
+          {cat.label}
+
           <span
             className="px-2 py-0.5 rounded-full text-xs font-semibold"
             style={{
@@ -349,18 +343,10 @@ export default function ProductsPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="flex gap-6">
-          {/* ── Sidebar (desktop) ──────────────────────────────────── */}
-          <aside
-            className="hidden lg:block flex-shrink-0 bg-white rounded-2xl border border-gray-200 p-4 h-fit sticky top-24"
-            style={{ width: "220px" }}
-          >
-            {SidebarContent}
-          </aside>
-
-          {/* ── Main content ───────────────────────────────────────── */}
-          <div className="flex-1 min-w-0">
-            {/* Toolbar */}
+        {/* Mobile: flex (toolbar + products), Desktop: grid 2 hàng */}
+        <div className="flex flex-col lg:grid lg:grid-cols-[220px_1fr] lg:grid-rows-[auto_1fr] gap-6">
+          {/* ── Toolbar (hàng 1 trên desktop) ─────────────────────────── */}
+          <div className="lg:col-span-2 lg:row-start-1">
             <div className="flex items-center justify-between gap-3 mb-5 flex-wrap">
               {/* Search + mobile sidebar toggle */}
               <div className="flex items-center gap-2 flex-1 min-w-0">
@@ -373,13 +359,6 @@ export default function ProductsPage() {
                   <SlidersHorizontal size={14} />
                   Lọc
                 </button>
-
-                <span
-                  className="text-gray-500 flex-shrink-0"
-                  style={{ fontSize: "13px" }}
-                >
-                  {filtered.length} kết quả
-                </span>
               </div>
 
               {/* Sort dropdown */}
@@ -420,8 +399,17 @@ export default function ProductsPage() {
                 )}
               </div>
             </div>
+          </div>
 
-            {/* Product grid */}
+          {/* ── Sidebar (desktop: hàng 2 cột 1, mobile: ẩn) ─────────── */}
+          <aside className="hidden lg:block lg:row-start-2">
+            <div className="bg-white rounded-2xl border border-gray-200 p-4 sticky top-[var(--top-header-height)]">
+              {SidebarContent}
+            </div>
+          </aside>
+
+          {/* ── Product grid (hàng 2 cột 2 trên desktop) ──────────────────── */}
+          <div className="lg:col-start-2 lg:row-start-2 min-w-0">
             {paginated.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-24 text-center">
                 <PackageX size={48} className="text-gray-300 mb-4" />
