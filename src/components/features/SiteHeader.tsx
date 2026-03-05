@@ -20,14 +20,14 @@ export function SiteHeader() {
     // Cần đo cả top header và navbar để tính tổng chiều cao
     const updateHeight = () => {
       const topHeaderHeight = topHeaderRef.current
-        ? Math.round(topHeaderRef.current.getBoundingClientRect().height) + 1
+        ? Math.ceil(topHeaderRef.current.getBoundingClientRect().height)
         : 104; // mặc định desktop
 
       const navbarHeight = navbarRef.current
-        ? Math.round(navbarRef.current.getBoundingClientRect().height)
+        ? Math.ceil(navbarRef.current.getBoundingClientRect().height)
         : 48; // mặc định desktop
 
-      // Spacer cần tính đủ cả top header + navbar
+      // Spacer = tổng chiều cao thực tế
       const totalHeight = topHeaderHeight + navbarHeight;
       document.documentElement.style.setProperty(
         "--top-header-height",
