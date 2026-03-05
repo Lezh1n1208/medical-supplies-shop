@@ -8,7 +8,7 @@ export async function GET() {
     const products = await ProductAdminService.getAll();
     return NextResponse.json({ products });
   } catch (err: any) {
-    handleError(err);
+    return handleError(err);
   }
 }
 
@@ -17,7 +17,6 @@ export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
 
-    // Parse product fields
     const raw = {
       name: formData.get("name"),
       slug: formData.get("slug"),
@@ -33,8 +32,9 @@ export async function POST(req: NextRequest) {
     const files = formData.getAll("files") as File[];
 
     const product = await ProductAdminService.create(raw, files);
+
     return NextResponse.json({ product }, { status: 201 });
   } catch (err: any) {
-    handleError(err);
+    return handleError(err);
   }
 }

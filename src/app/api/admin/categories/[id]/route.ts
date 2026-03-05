@@ -2,12 +2,15 @@ import { handleError } from "@/app/api/handle-error";
 import { CategoryAdminService } from "@/services/category.admin.service";
 import { NextRequest, NextResponse } from "next/server";
 
-type Params = { params: { id: string } };
-
 // GET /api/admin/categories/:id
-export async function GET(_req: NextRequest, { params }: Params) {
+export async function GET(
+  _req: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
-    const category = await CategoryAdminService.getById(params.id);
+    const { id } = await params;
+
+    const category = await CategoryAdminService.getById(id);
     return NextResponse.json({ category });
   } catch (err: any) {
     return handleError(err);
@@ -15,8 +18,13 @@ export async function GET(_req: NextRequest, { params }: Params) {
 }
 
 // PATCH /api/admin/categories/:id
-export async function PATCH(req: NextRequest, { params }: Params) {
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
+    const { id } = await params;
+
     const formData = await req.formData();
 
     const raw: Record<string, unknown> = {};
@@ -33,10 +41,11 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     const thumbnail = formData.get("thumbnail") as File | null;
 
     const category = await CategoryAdminService.update(
-      params.id,
+      id,
       raw,
       thumbnail ?? undefined,
     );
+
     return NextResponse.json({ category });
   } catch (err: any) {
     return handleError(err);
@@ -44,9 +53,14 @@ export async function PATCH(req: NextRequest, { params }: Params) {
 }
 
 // DELETE /api/admin/categories/:id
-export async function DELETE(_req: NextRequest, { params }: Params) {
+export async function DELETE(
+  _req: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
-    await CategoryAdminService.delete(params.id);
+    const { id } = await params;
+
+    await CategoryAdminService.delete(id);
     return NextResponse.json({ success: true });
   } catch (err: any) {
     return handleError(err);

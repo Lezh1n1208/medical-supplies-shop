@@ -1,29 +1,34 @@
-// src/app/api/admin/products/[id]/images/[imageId]/route.ts
 import { handleError } from "@/app/api/handle-error";
 import { ProductImageAdminService } from "@/services/product-image.admin.service";
 import { NextRequest, NextResponse } from "next/server";
 
-type Params = { params: { id: string; imageId: string } };
-
 // DELETE /api/admin/products/:id/images/:imageId
-export async function DELETE(_req: NextRequest, { params }: Params) {
+export async function DELETE(
+  _req: NextRequest,
+  { params }: { params: Promise<{ id: string; imageId: string }> },
+) {
   try {
-    await ProductImageAdminService.deleteOne(params.imageId);
+    const { imageId } = await params;
+
+    await ProductImageAdminService.deleteOne(imageId);
     return NextResponse.json({ success: true });
   } catch (err: any) {
-    handleError(err);
+    return handleError(err);
   }
 }
 
 // PATCH /api/admin/products/:id/images/:imageId — đổi thumbnail
-export async function PATCH(_req: NextRequest, { params }: Params) {
+export async function PATCH(
+  _req: NextRequest,
+  { params }: { params: Promise<{ id: string; imageId: string }> },
+) {
   try {
-    const image = await ProductImageAdminService.setThumbnail(
-      params.id,
-      params.imageId,
-    );
+    const { id, imageId } = await params;
+
+    const image = await ProductImageAdminService.setThumbnail(id, imageId);
+
     return NextResponse.json({ image });
   } catch (err: any) {
-    handleError(err);
+    return handleError(err);
   }
 }

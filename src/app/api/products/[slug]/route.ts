@@ -2,14 +2,18 @@ import { ProductPublicService } from "@/services/product.public.service";
 import { NextRequest, NextResponse } from "next/server";
 import { handleError } from "../../handle-error";
 
-type Params = { params: { slug: string } };
-
 // GET /api/products/:slug
-export async function GET(_req: NextRequest, { params }: Params) {
+export async function GET(
+  _req: NextRequest,
+  { params }: { params: Promise<{ slug: string }> },
+) {
   try {
-    const product = await ProductPublicService.getBySlug(params.slug);
+    const { slug } = await params;
+
+    const product = await ProductPublicService.getBySlug(slug);
+
     return NextResponse.json({ product });
   } catch (err: any) {
-    handleError(err);
+    return handleError(err);
   }
 }
