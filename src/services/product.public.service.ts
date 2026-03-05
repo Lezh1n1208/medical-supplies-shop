@@ -1,17 +1,10 @@
+import { assertNoError } from "@/lib/supabase/assert";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { ProductSchema } from "@/schemas/product.schema";
 import { z } from "zod";
 
 /* ========================
-   HELPER
-======================== */
-function assertNoError(error: { message: string } | null): void {
-  if (error) throw new Error(error.message);
-}
-
-/* ========================
    RESPONSE SCHEMAS (view-specific, not part of DB schema)
-   Extend ProductSchema với các relation được join thêm
 ======================== */
 const ProductCategorySchema = z.object({
   name: z.string(),
@@ -61,12 +54,16 @@ export class ProductPublicService {
       .from("products")
       .select(
         `
-        *,
-        categories(name, slug),
-        product_images(image_url, is_thumbnail, sort_order)
-      `,
+      *,
+      categories(name, slug),
+      product_images(image_url, is_thumbnail, sort_order)
+    `,
       )
       .eq("slug", slug)
+      .order("sort_order", {
+        referencedTable: "product_images",
+        ascending: true,
+      })
       .single();
 
     assertNoError(error);
@@ -119,6 +116,11 @@ export class ProductPublicService {
     if (maxPrice != null) {
       query = query.lte("price", maxPrice);
     }
+
+    query = query.order("sort_order", {
+      referencedTable: "product_images",
+      ascending: true,
+    });
 
     const from = (page - 1) * limit;
     const to = from + limit - 1;

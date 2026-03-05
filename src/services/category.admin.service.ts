@@ -1,16 +1,10 @@
 import { supabaseAdmin } from "@/lib/supabase/admin";
+import { assertNoError } from "@/lib/supabase/assert";
 import {
   CategorySchema,
   CreateCategorySchema,
   UpdateCategorySchema,
 } from "@/schemas/category.schema";
-
-/* ========================
-   HELPER
-======================== */
-function assertNoError(error: { message: string } | null): void {
-  if (error) throw new Error(error.message);
-}
 
 /* ========================
    SERVICE

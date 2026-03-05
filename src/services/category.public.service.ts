@@ -1,12 +1,6 @@
+import { assertNoError } from "@/lib/supabase/assert";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { CategorySchema } from "@/schemas/category.schema";
-
-/* ========================
-   HELPER
-======================== */
-function assertNoError(error: { message: string } | null): void {
-  if (error) throw new Error(error.message);
-}
 
 /* ========================
    SERVICE

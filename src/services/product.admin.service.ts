@@ -1,16 +1,11 @@
 import { supabaseAdmin } from "@/lib/supabase/admin";
+import { assertNoError } from "@/lib/supabase/assert";
 import {
   ProductSchema,
   CreateProductSchema,
   UpdateProductSchema,
 } from "@/schemas/product.schema";
-
-/* ========================
-   HELPER
-======================== */
-function assertNoError(error: { message: string } | null): void {
-  if (error) throw new Error(error.message);
-}
+import { ProductImageAdminService } from "./product-image.admin.service";
 
 /* ========================
    SERVICE
@@ -37,7 +32,7 @@ export class ProductAdminService {
     return ProductSchema.parse(data);
   }
 
-  static async create(data: unknown) {
+  static async create(data: unknown, files: File[] = []) {
     const parsed = CreateProductSchema.parse(data);
 
     const { data: result, error } = await supabaseAdmin
@@ -47,10 +42,23 @@ export class ProductAdminService {
       .single();
 
     assertNoError(error);
-    return ProductSchema.parse(result);
+    const product = ProductSchema.parse(result);
+
+    // Upload image — rollback product if upload fail
+    if (files.length > 0) {
+      try {
+        await ProductImageAdminService.uploadMany(product.id, files);
+      } catch (err) {
+        // Upload thất bại → xóa product vừa tạo để tránh orphan record
+        await supabaseAdmin.from("products").delete().eq("id", product.id);
+        throw err;
+      }
+    }
+
+    return product;
   }
 
-  static async update(id: string, data: unknown) {
+  static async update(id: string, data: unknown, files: File[] = []) {
     const parsed = UpdateProductSchema.parse(data);
 
     const { data: result, error } = await supabaseAdmin
@@ -61,10 +69,18 @@ export class ProductAdminService {
       .single();
 
     assertNoError(error);
-    return ProductSchema.parse(result);
+    const product = ProductSchema.parse(result);
+
+    if (files.length > 0) {
+      await ProductImageAdminService.deleteAllByProduct(id);
+      await ProductImageAdminService.uploadMany(id, files);
+    }
+
+    return product;
   }
 
   static async delete(id: string) {
+    await ProductImageAdminService.deleteAllByProduct(id);
     const { error } = await supabaseAdmin
       .from("products")
       .delete()

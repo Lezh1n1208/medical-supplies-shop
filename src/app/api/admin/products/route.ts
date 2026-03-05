@@ -1,0 +1,52 @@
+import { ProductAdminService } from "@/services/product.admin.service";
+import { NextRequest, NextResponse } from "next/server";
+
+// GET /api/admin/products
+export async function GET() {
+  try {
+    const products = await ProductAdminService.getAll();
+    return NextResponse.json({ products });
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+}
+
+// POST /api/admin/products
+export async function POST(req: NextRequest) {
+  try {
+    const formData = await req.formData();
+
+    // Parse product fields
+    const raw = {
+      name: formData.get("name"),
+      slug: formData.get("slug"),
+      category_id: formData.get("category_id") ?? undefined,
+      description: formData.get("description") ?? undefined,
+      price_type: formData.get("price_type"),
+      price: formData.get("price") ? Number(formData.get("price")) : undefined,
+      sale_price: formData.get("sale_price")
+        ? Number(formData.get("sale_price"))
+        : undefined,
+    };
+
+    const files = formData.getAll("files") as File[];
+
+    const product = await ProductAdminService.create(raw, files);
+    return NextResponse.json({ product }, { status: 201 });
+  } catch (err: any) {
+    if (err.code === "VALIDATION_ERROR") {
+      return NextResponse.json(
+        { error: err.message, details: err.details },
+        { status: 422 },
+      );
+    }
+    // ZodError từ schema parse
+    if (err.name === "ZodError") {
+      return NextResponse.json(
+        { error: "Invalid product data", details: err.errors },
+        { status: 422 },
+      );
+    }
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+}
