@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import crypto from "node:crypto";
+import crypto, { timingSafeEqual } from "node:crypto";
 
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME!;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD!;
@@ -35,13 +35,17 @@ export async function clearAdminSession() {
   cookieStore.delete(COOKIE_NAME);
 }
 
-export async function verifyAdminSession(cookieValue?: string) {
+export function verifyAdminSession(cookieValue?: string) {
   if (!cookieValue) return false;
-
   const [payload, signature] = cookieValue.split(".");
   if (!payload || !signature) return false;
 
   const expected = sign(payload);
 
-  return signature === expected;
+  try {
+    return timingSafeEqual(Buffer.from(signature), Buffer.from(expected));
+  } catch {
+    // Buffer length khác nhau → timingSafeEqual throw
+    return false;
+  }
 }

@@ -13,5 +13,8 @@ export function handleError(err: any) {
       { status: 422 },
     );
   }
+  if (err.message.includes("PGRST116")) {
+    return NextResponse.json({ error: "Category not found" }, { status: 404 });
+  }
   return NextResponse.json({ error: err.message }, { status: 500 });
 }
