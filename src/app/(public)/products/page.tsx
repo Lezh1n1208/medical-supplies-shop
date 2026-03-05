@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { products, type Product } from "@/data";
 import {
   Phone,
   ShoppingCart,
@@ -9,22 +10,10 @@ import {
   ChevronRight,
   SlidersHorizontal,
   X,
-  Search,
   PackageX,
 } from "lucide-react";
 
 // ── Types ────────────────────────────────────────────────────────────────────
-interface Product {
-  id: number;
-  name: string;
-  brand: string;
-  origin: string;
-  price: number | null; // null = "Liên hệ báo giá"
-  unit: string;
-  category: string;
-  img: string;
-  isNew?: boolean;
-}
 
 // ── Categories ───────────────────────────────────────────────────────────────
 const CATEGORIES = [
@@ -44,478 +33,6 @@ const SORT_OPTIONS = [
 ];
 
 const PAGE_SIZE = 16;
-
-// ── Mock data (real products from Ánh Dương Phát catalog) ────────────────────
-const ALL_PRODUCTS: Product[] = [
-  // ── Vật tư tiêu hao ──────────────────────────────────────────────────────
-  {
-    id: 1,
-    name: "Ống nội khí quản có bóng các size 5–7.5",
-    brand: "Greetmed",
-    origin: "Trung Quốc",
-    price: 14500,
-    unit: "Cái",
-    category: "tieu-hao",
-    img: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&h=300&fit=crop",
-  },
-  {
-    id: 2,
-    name: "Gạc tẩm cồn hộp 100 miếng",
-    brand: "Greetmed",
-    origin: "Trung Quốc",
-    price: 17000,
-    unit: "Hộp",
-    category: "tieu-hao",
-    img: "https://images.unsplash.com/photo-1631815588090-d4bfec5b1ccb?w=400&h=300&fit=crop",
-  },
-  {
-    id: 3,
-    name: "Băng dính cố định kim luồn trong suốt 6×7cm",
-    brand: "Eurofarm",
-    origin: "Italia",
-    price: 7875,
-    unit: "Miếng",
-    category: "tieu-hao",
-    img: "https://images.unsplash.com/photo-1603398938378-e54eab446dde?w=400&h=300&fit=crop",
-  },
-  {
-    id: 4,
-    name: "Băng keo cá nhân Innoplast vải đỏ hộp 100 miếng",
-    brand: "Innoplast",
-    origin: "Thái Lan",
-    price: 38000,
-    unit: "Hộp",
-    category: "tieu-hao",
-    img: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=400&h=300&fit=crop",
-  },
-  {
-    id: 5,
-    name: "Xốp cầm máu tự tiêu Spongostan 7×5×1cm hộp 20",
-    brand: "Ethicon",
-    origin: "Đan Mạch",
-    price: 3661000,
-    unit: "Hộp",
-    category: "tieu-hao",
-    img: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop",
-  },
-  {
-    id: 6,
-    name: "Xốp cầm máu mũi UMAXO có dây",
-    brand: "UMX",
-    origin: "Việt Nam",
-    price: 72500,
-    unit: "Miếng",
-    category: "tieu-hao",
-    img: "https://images.unsplash.com/photo-1631815588090-d4bfec5b1ccb?w=400&h=300&fit=crop",
-  },
-  {
-    id: 7,
-    name: "Bình tạo ẩm oxy Acare",
-    brand: "Acare",
-    origin: "Đài Loan",
-    price: 415000,
-    unit: "Cái",
-    category: "tieu-hao",
-    img: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400&h=300&fit=crop",
-  },
-  {
-    id: 8,
-    name: "Lọc khuẩn 3 chức năng HME",
-    brand: "Canack",
-    origin: "Canada",
-    price: 35000,
-    unit: "Cái",
-    category: "tieu-hao",
-    img: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&h=300&fit=crop",
-  },
-  {
-    id: 9,
-    name: "Dây hút nhớt có khóa các size",
-    brand: "Greetmed",
-    origin: "Trung Quốc",
-    price: 2200,
-    unit: "Cái",
-    category: "tieu-hao",
-    img: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop",
-  },
-  {
-    id: 10,
-    name: "Dây Foley 2 nhánh các size",
-    brand: "Greetmed",
-    origin: "Trung Quốc",
-    price: 12500,
-    unit: "Cái",
-    category: "tieu-hao",
-    img: "https://images.unsplash.com/photo-1603398938378-e54eab446dde?w=400&h=300&fit=crop",
-  },
-  {
-    id: 11,
-    name: "Dây truyền máu B.Braun 180cm",
-    brand: "B.Braun",
-    origin: "Việt Nam",
-    price: 27800,
-    unit: "Sợi",
-    category: "tieu-hao",
-    img: "https://images.unsplash.com/photo-1631815588090-d4bfec5b1ccb?w=400&h=300&fit=crop",
-  },
-  {
-    id: 12,
-    name: "Dây nối bơm tiêm điện 140cm Bbraun",
-    brand: "B.Braun",
-    origin: "Việt Nam",
-    price: 15625,
-    unit: "Sợi",
-    category: "tieu-hao",
-    img: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400&h=300&fit=crop",
-  },
-  {
-    id: 13,
-    name: "Vớ tĩnh mạch gối các size S/M/L/XL",
-    brand: "Noamed",
-    origin: "Thổ Nhĩ Kỳ",
-    price: 350000,
-    unit: "Đôi",
-    category: "tieu-hao",
-    img: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=400&h=300&fit=crop",
-  },
-  {
-    id: 14,
-    name: "Vớ tĩnh mạch dài các size S/M/L/XL",
-    brand: "Noamed",
-    origin: "Thổ Nhĩ Kỳ",
-    price: 485000,
-    unit: "Đôi",
-    category: "tieu-hao",
-    img: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop",
-  },
-  {
-    id: 15,
-    name: "Máy đo huyết áp điện tử Omron HEM-8712",
-    brand: "Omron",
-    origin: "Việt Nam",
-    price: 850000,
-    unit: "Cái",
-    category: "tieu-hao",
-    img: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=300&fit=crop",
-    isNew: true,
-  },
-  {
-    id: 16,
-    name: "Bộ đo huyết áp cơ Yamasu",
-    brand: "Yamasu",
-    origin: "Nhật Bản",
-    price: 580000,
-    unit: "Cái",
-    category: "tieu-hao",
-    img: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=300&fit=crop",
-  },
-  {
-    id: 17,
-    name: "Nhiệt kế đo trán hồng ngoại Microlife FR1MF1",
-    brand: "Microlife",
-    origin: "Thụy Sĩ",
-    price: 890000,
-    unit: "Cái",
-    category: "tieu-hao",
-    img: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&h=300&fit=crop",
-    isNew: true,
-  },
-  {
-    id: 18,
-    name: "Bộ đo huyết áp cơ ALPK2",
-    brand: "ALPK2",
-    origin: "Nhật Bản",
-    price: 600000,
-    unit: "Cái",
-    category: "tieu-hao",
-    img: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=300&fit=crop",
-  },
-  {
-    id: 19,
-    name: "Bút đánh dấu phẫu thuật Tecfen Medical",
-    brand: "Tecfen Medical",
-    origin: "Đức",
-    price: 95000,
-    unit: "Cái",
-    category: "tieu-hao",
-    img: "https://images.unsplash.com/photo-1603398938378-e54eab446dde?w=400&h=300&fit=crop",
-  },
-  {
-    id: 20,
-    name: "Băng keo chỉ thị nhiệt lò hấp Gima 19mm",
-    brand: "Gima",
-    origin: "Ý",
-    price: 95000,
-    unit: "Cuộn",
-    category: "tieu-hao",
-    img: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop",
-  },
-  {
-    id: 21,
-    name: "Dung dịch khử khuẩn STERANIOS 2% 5 lít",
-    brand: "Anios",
-    origin: "Pháp",
-    price: 485000,
-    unit: "Can",
-    category: "tieu-hao",
-    img: "https://images.unsplash.com/photo-1631815588090-d4bfec5b1ccb?w=400&h=300&fit=crop",
-  },
-  {
-    id: 22,
-    name: "Dung dịch khử khuẩn mức cao CIDEX OPA 3.78L",
-    brand: "Johnson & Johnson",
-    origin: "Ireland",
-    price: 1057472,
-    unit: "Can",
-    category: "tieu-hao",
-    img: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400&h=300&fit=crop",
-  },
-  {
-    id: 23,
-    name: "Viên nén sát khuẩn PRESEPT 2.5Gr hộp 100 viên",
-    brand: "Johnson & Johnson",
-    origin: "Ireland",
-    price: 550000,
-    unit: "Hộp",
-    category: "tieu-hao",
-    img: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=400&h=300&fit=crop",
-  },
-  {
-    id: 24,
-    name: "Dây hút dịch silicon cuộn 30m (hấp nhiều lần)",
-    brand: "Gima",
-    origin: "Ý",
-    price: 5800000,
-    unit: "Cuộn",
-    category: "tieu-hao",
-    img: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&h=300&fit=crop",
-  },
-  {
-    id: 25,
-    name: "Xốp cầm máu Merocel hộp 10 miếng",
-    brand: "Medtronic",
-    origin: "Mỹ",
-    price: 140000,
-    unit: "Miếng",
-    category: "tieu-hao",
-    img: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop",
-  },
-  {
-    id: 26,
-    name: "Mặt nạ gây mê số 1–4 Greetmed",
-    brand: "Greetmed",
-    origin: "Trung Quốc",
-    price: 38000,
-    unit: "Cái",
-    category: "tieu-hao",
-    img: "https://images.unsplash.com/photo-1603398938378-e54eab446dde?w=400&h=300&fit=crop",
-  },
-  {
-    id: 27,
-    name: "Bình hút áp lực âm 200ml",
-    brand: "Yudu",
-    origin: "Trung Quốc",
-    price: 95000,
-    unit: "Cái",
-    category: "tieu-hao",
-    img: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400&h=300&fit=crop",
-  },
-  {
-    id: 28,
-    name: "Bình hút áp lực âm 400ml",
-    brand: "Yudu",
-    origin: "Trung Quốc",
-    price: 105000,
-    unit: "Cái",
-    category: "tieu-hao",
-    img: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&h=300&fit=crop",
-  },
-
-  // ── Vật tư chỉnh hình ────────────────────────────────────────────────────
-  {
-    id: 29,
-    name: 'Băng bó bột Altocast 2" thủy tinh',
-    brand: "Altochem",
-    origin: "Hàn Quốc",
-    price: 73868,
-    unit: "Cuộn",
-    category: "chinh-hinh",
-    img: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop",
-  },
-  {
-    id: 30,
-    name: 'Băng bó bột Altocast 3" thủy tinh',
-    brand: "Altochem",
-    origin: "Hàn Quốc",
-    price: 94815,
-    unit: "Cuộn",
-    category: "chinh-hinh",
-    img: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop",
-  },
-  {
-    id: 31,
-    name: 'Băng bó bột Altocast 4" thủy tinh',
-    brand: "Altochem",
-    origin: "Hàn Quốc",
-    price: 105840,
-    unit: "Cuộn",
-    category: "chinh-hinh",
-    img: "https://images.unsplash.com/photo-1603398938378-e54eab446dde?w=400&h=300&fit=crop",
-  },
-  {
-    id: 32,
-    name: 'Băng bó bột Altocast 5" thủy tinh',
-    brand: "Altochem",
-    origin: "Hàn Quốc",
-    price: 132000,
-    unit: "Cuộn",
-    category: "chinh-hinh",
-    img: "https://images.unsplash.com/photo-1603398938378-e54eab446dde?w=400&h=300&fit=crop",
-  },
-  {
-    id: 33,
-    name: "Bông gòn bó bột Natural 5cm×2.7m",
-    brand: "Bastos",
-    origin: "Hàn Quốc",
-    price: 21193,
-    unit: "Cuộn",
-    category: "chinh-hinh",
-    img: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=400&h=300&fit=crop",
-  },
-  {
-    id: 34,
-    name: "Bông gòn bó bột Natural 7.5cm×2.7m",
-    brand: "Bastos",
-    origin: "Hàn Quốc",
-    price: 26775,
-    unit: "Cuộn",
-    category: "chinh-hinh",
-    img: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=400&h=300&fit=crop",
-  },
-  {
-    id: 35,
-    name: "Bông gòn bó bột Natural 10cm×2.7m",
-    brand: "Bastos",
-    origin: "Hàn Quốc",
-    price: 34125,
-    unit: "Cuộn",
-    category: "chinh-hinh",
-    img: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=400&h=300&fit=crop",
-  },
-  {
-    id: 36,
-    name: "Thun vớ Stockinette 5cm×25m dùng bó bột",
-    brand: "Bastos",
-    origin: "Bồ Đào Nha",
-    price: 464100,
-    unit: "Cuộn",
-    category: "chinh-hinh",
-    img: "https://images.unsplash.com/photo-1631815588090-d4bfec5b1ccb?w=400&h=300&fit=crop",
-  },
-  {
-    id: 37,
-    name: "Thun vớ Stockinette 10cm×25m dùng bó bột",
-    brand: "Bastos",
-    origin: "Bồ Đào Nha",
-    price: 666750,
-    unit: "Cuộn",
-    category: "chinh-hinh",
-    img: "https://images.unsplash.com/photo-1631815588090-d4bfec5b1ccb?w=400&h=300&fit=crop",
-  },
-  {
-    id: 38,
-    name: "Xe lăn CT-Care KY863LAJ-20 công nghệ Nhật",
-    brand: "CT-Care",
-    origin: "Việt Nam",
-    price: 2750000,
-    unit: "Cái",
-    category: "chinh-hinh",
-    img: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&h=300&fit=crop",
-    isNew: true,
-  },
-  {
-    id: 39,
-    name: "Nạng nhôm cho người khuyết tật C39A",
-    brand: "Alumin",
-    origin: "Trung Quốc",
-    price: 200000,
-    unit: "Cặp",
-    category: "chinh-hinh",
-    img: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&h=300&fit=crop",
-  },
-  {
-    id: 40,
-    name: "Bó mắt cá chân Goodfit full size",
-    brand: "Goodfit",
-    origin: "Trung Quốc",
-    price: 79000,
-    unit: "Cái",
-    category: "chinh-hinh",
-    img: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop",
-  },
-
-  // ── Giấy in y tế ─────────────────────────────────────────────────────────
-  {
-    id: 41,
-    name: "Giấy điện tim Sonomed 50mm×30m",
-    brand: "Sonomed",
-    origin: "Malaysia",
-    price: 21000,
-    unit: "Cuộn",
-    category: "giay-in",
-    img: "https://images.unsplash.com/photo-1603398938378-e54eab446dde?w=400&h=300&fit=crop",
-  },
-  {
-    id: 42,
-    name: "Giấy điện tim Sonomed 60mm×30m",
-    brand: "Sonomed",
-    origin: "Malaysia",
-    price: 23000,
-    unit: "Cuộn",
-    category: "giay-in",
-    img: "https://images.unsplash.com/photo-1603398938378-e54eab446dde?w=400&h=300&fit=crop",
-  },
-  {
-    id: 43,
-    name: "Giấy điện tim Sonomed 145mm×30m",
-    brand: "Sonomed",
-    origin: "Malaysia",
-    price: 60000,
-    unit: "Cuộn",
-    category: "giay-in",
-    img: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=400&h=300&fit=crop",
-  },
-  {
-    id: 44,
-    name: "Giấy in bill nhiệt 80×80mm",
-    brand: "Quen Quen",
-    origin: "Việt Nam",
-    price: 25000,
-    unit: "Cuộn",
-    category: "giay-in",
-    img: "https://images.unsplash.com/photo-1631815588090-d4bfec5b1ccb?w=400&h=300&fit=crop",
-  },
-  {
-    id: 45,
-    name: "Giấy in kết quả siêu âm Sony 110S",
-    brand: "Sony",
-    origin: "Nhật Bản",
-    price: 155000,
-    unit: "Cuộn",
-    category: "giay-in",
-    img: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400&h=300&fit=crop",
-  },
-  {
-    id: 46,
-    name: "Ly giấy dùng một lần 185ml",
-    brand: "Hàn Quốc",
-    origin: "Hàn Quốc",
-    price: 350,
-    unit: "Cái",
-    category: "giay-in",
-    img: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&h=300&fit=crop",
-  },
-];
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 function formatPrice(price: number): string {
@@ -710,15 +227,15 @@ export default function ProductsPage() {
         ...c,
         count:
           c.slug === "all"
-            ? ALL_PRODUCTS.length
-            : ALL_PRODUCTS.filter((p) => p.category === c.slug).length,
+            ? products.length
+            : products.filter((p) => p.category === c.slug).length,
       })),
     [],
   );
 
   // ── Filter + sort ──────────────────────────────────────────────────────
   const filtered = useMemo(() => {
-    let list = ALL_PRODUCTS;
+    let list = products;
 
     if (activeCategory !== "all") {
       list = list.filter((p) => p.category === activeCategory);
@@ -826,7 +343,7 @@ export default function ProductsPage() {
             Tất Cả Sản Phẩm
           </h1>
           <p className="text-gray-500" style={{ fontSize: "14px" }}>
-            {ALL_PRODUCTS.length} sản phẩm vật tư y tế chính hãng
+            {products.length} sản phẩm vật tư y tế chính hãng
           </p>
         </div>
       </div>
@@ -856,25 +373,6 @@ export default function ProductsPage() {
                   <SlidersHorizontal size={14} />
                   Lọc
                 </button>
-
-                {/* Search */}
-                <div className="relative flex-1 max-w-xs">
-                  <Search
-                    size={14}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                  />
-                  <input
-                    type="text"
-                    value={searchQ}
-                    onChange={(e) => {
-                      setSearchQ(e.target.value);
-                      setPage(1);
-                    }}
-                    placeholder="Tìm sản phẩm..."
-                    className="w-full pl-8 pr-3 py-2 rounded-lg border border-gray-200 bg-white focus:outline-none focus:border-blue-400 transition-all"
-                    style={{ fontSize: "13px" }}
-                  />
-                </div>
 
                 <span
                   className="text-gray-500 flex-shrink-0"

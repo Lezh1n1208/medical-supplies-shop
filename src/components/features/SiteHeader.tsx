@@ -14,27 +14,38 @@ export function SiteHeader() {
 
   // ===== ResizeObserver =====
   const topHeaderRef = useRef<HTMLDivElement>(null);
+  const navbarRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    if (!topHeaderRef.current) return;
-
-    const el = topHeaderRef.current;
-
+    // Cần đo cả top header và navbar để tính tổng chiều cao
     const updateHeight = () => {
-      const rect = el.getBoundingClientRect();
-      const height = Math.round(rect.height) + 1;
+      const topHeaderHeight = topHeaderRef.current
+        ? Math.round(topHeaderRef.current.getBoundingClientRect().height) + 1
+        : 104; // mặc định desktop
+
+      const navbarHeight = navbarRef.current
+        ? Math.round(navbarRef.current.getBoundingClientRect().height)
+        : 48; // mặc định desktop
+
+      // Spacer cần tính đủ cả top header + navbar
+      const totalHeight = topHeaderHeight + navbarHeight;
       document.documentElement.style.setProperty(
         "--top-header-height",
-        `${height}px`,
+        `${totalHeight}px`,
       );
     };
 
-    updateHeight();
+    // Đợi một chút để DOM ổn định
+    const timer = setTimeout(updateHeight, 100);
 
     const observer = new ResizeObserver(updateHeight);
-    observer.observe(el);
+    if (topHeaderRef.current) observer.observe(topHeaderRef.current);
+    if (navbarRef.current) observer.observe(navbarRef.current);
 
-    return () => observer.disconnect();
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+    };
   }, []);
 
   // ===== Scroll handler =====
@@ -209,6 +220,7 @@ export function SiteHeader() {
 
         {/* ===== NAVBAR - FIX: Luôn ngay dưới header, không dùng top ===== */}
         <nav
+          ref={navbarRef}
           className="hidden md:block shadow-md"
           style={{
             backgroundColor: "#1565C0",
