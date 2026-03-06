@@ -1,5 +1,5 @@
-import { SiteHeader } from "@/components/features/SiteHeader";
-import { SiteFooter } from "@/components/features/SiteFooter";
+import { SiteHeader } from "@/components/features/public/header/SiteHeader";
+import { SiteFooter } from "@/components/features/public/footer/SiteFooter";
 import { FloatingContacts } from "@/components/ui/FloatingContacts";
 
 export default function PublicLayout({

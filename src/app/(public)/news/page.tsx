@@ -1,5 +1,5 @@
 "use client"
-import { NewsSection } from "@/components/features/NewsSection";
+import { NewsSection } from "@/components/features/public/pages/NewsSection";
 
 export default function NewsPage() {
   return (

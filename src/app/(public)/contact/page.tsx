@@ -1,5 +1,5 @@
 "use client";
-import { CTABanner } from "@/components/features/CTABanner";
+import { CTABanner } from "@/components/features/public/pages/CTABanner";
 
 export default function ContactPage() {
   return (

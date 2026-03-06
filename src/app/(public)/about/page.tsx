@@ -1,7 +1,7 @@
 "use client";
-import { StatsBar } from "@/components/features/StatsBar";
-import { TestimonialsSection } from "@/components/features/TestimonialsSection";
-import { BrandsSection } from "@/components/features/BrandsSection";
+import { StatsBar } from "@/components/features/public/pages/StatsBar";
+import { TestimonialsSection } from "@/components/features/public/pages/TestimonialsSection";
+import { BrandsSection } from "@/components/features/public/pages/BrandsSection";
 import { Shield, Award, Users, TrendingUp } from "lucide-react";
 
 export default function AboutPage() {
