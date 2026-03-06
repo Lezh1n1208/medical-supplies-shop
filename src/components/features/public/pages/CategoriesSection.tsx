@@ -49,8 +49,6 @@ export function CategoriesSection() {
   const { data: categories = [], isLoading } = usePublicCategories();
   const [offset, setOffset] = useState(0);
   const [paused, setPaused] = useState(false);
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [touchDelta, setTouchDelta] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Sort by display_order
@@ -59,7 +57,7 @@ export function CategoriesSection() {
   );
 
   const total = sortedCategories.length;
-  const canSlide = total > VISIBLE_DESKTOP;
+  const canSlide = total > 0; // Luôn hiện arrows khi có ít nhất 1 category
 
   const next = useCallback(() => {
     setOffset((o) => (o + 1) % total);
@@ -81,28 +79,14 @@ export function CategoriesSection() {
     (_, i) => sortedCategories[(offset + i) % total],
   );
 
-  // Touch handlers for mobile swipe
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.touches[0].clientX);
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (touchStart === null) return;
-    const delta = touchStart - e.touches[0].clientX;
-    setTouchDelta(delta);
-  };
-
-  const handleTouchEnd = () => {
-    if (Math.abs(touchDelta) > 50) {
-      if (touchDelta > 0) {
-        next(); // Swipe left - next
-      } else {
-        prev(); // Swipe right - prev
-      }
-    }
-    setTouchStart(null);
-    setTouchDelta(0);
-  };
+  // Mobile: duplicate items 5x for infinite loop effect
+  const mobileCategories = [
+    ...sortedCategories,
+    ...sortedCategories,
+    ...sortedCategories,
+    ...sortedCategories,
+    ...sortedCategories,
+  ];
 
   if (isLoading) {
     return (
@@ -128,13 +112,6 @@ export function CategoriesSection() {
   }
 
   if (total === 0) return null;
-
-  // Add duplicate items for infinite scroll on mobile
-  const mobileCategories = [
-    ...sortedCategories,
-    ...sortedCategories,
-    ...sortedCategories,
-  ];
 
   return (
     <section
@@ -229,25 +206,11 @@ export function CategoriesSection() {
             ))}
           </div>
 
-          {/* MOBILE INFINITE SWIPE */}
-          <div
-            className="md:hidden overflow-hidden"
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-          >
-            <div
-              className="flex gap-3 transition-transform duration-300"
-              style={{
-                transform: `translateX(${touchDelta}px)`,
-                width: "fit-content",
-              }}
-            >
+          {/* MOBILE - HORIZONTAL SCROLL */}
+          <div className="md:hidden overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar" style={{ scrollbarWidth: 'none' }}>
+            <div className="flex gap-3 px-4" style={{ width: 'max-content' }}>
               {mobileCategories.map((cat, i) => (
-                <div
-                  key={`${cat.id}-${i}`}
-                  className="w-[calc(33.333%-8px)] flex-shrink-0"
-                >
+                <div key={`mobile-${cat.id}-${i}`} className="w-[calc((100vw-32px)/3)] flex-shrink-0 snap-center">
                   <CategoryCard cat={cat} style={getCategoryStyle(i % total)} />
                 </div>
               ))}
