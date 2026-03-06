@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { usePublicCategories } from "@/hooks/use-public-categories";
 
 interface CategoryDropdownProps {
@@ -39,15 +38,6 @@ export function CategoryDropdown({
         onClick={onClose}
         className="flex items-center gap-2 px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-blue-700 text-[13px] transition-colors"
       >
-        {cat.thumbnail_url && (
-          <Image
-            src={cat.thumbnail_url}
-            alt={cat.name}
-            width={24}
-            height={24}
-            className="object-contain rounded"
-          />
-        )}
         {cat.name}
       </Link>
     ));

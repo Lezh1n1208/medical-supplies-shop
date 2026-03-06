@@ -1,17 +1,64 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { categories } from "@/data";
+import { usePublicCategories } from "@/hooks/use-public-categories";
 import { CategoryCard } from "./CategoryCard";
 
 const VISIBLE_DESKTOP = 6;
 
+// Generate consistent colors based on category index
+const COLORS = [
+  {
+    color: "#D97706",
+    bg: "linear-gradient(135deg, #FFFBEB 0%, #FDE68A 100%)",
+    borderColor: "#FCD34D",
+  },
+  {
+    color: "#1565C0",
+    bg: "linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%)",
+    borderColor: "#90CAF9",
+  },
+  {
+    color: "#00897B",
+    bg: "linear-gradient(135deg, #E0F2F1 0%, #B2DFDB 100%)",
+    borderColor: "#80CBC4",
+  },
+  {
+    color: "#7C3AED",
+    bg: "linear-gradient(135deg, #F3E8FF 0%, #DDD6FE 100%)",
+    borderColor: "#C4B5FD",
+  },
+  {
+    color: "#DC2626",
+    bg: "linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%)",
+    borderColor: "#FCA5A5",
+  },
+  {
+    color: "#059669",
+    bg: "linear-gradient(135deg, #ECFDF5 0%, #A7F3D0 100%)",
+    borderColor: "#6EE7B7",
+  },
+];
+
+function getCategoryStyle(index: number) {
+  return COLORS[index % COLORS.length];
+}
+
 export function CategoriesSection() {
+  const { data: categories = [], isLoading } = usePublicCategories();
   const [offset, setOffset] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchDelta, setTouchDelta] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const total = categories.length;
+  // Sort by display_order
+  const sortedCategories = [...categories].sort(
+    (a, b) => (a.display_order ?? 0) - (b.display_order ?? 0),
+  );
+
+  const total = sortedCategories.length;
   const canSlide = total > VISIBLE_DESKTOP;
 
   const next = useCallback(() => {
@@ -31,8 +78,63 @@ export function CategoriesSection() {
 
   const visibleDesktop = Array.from(
     { length: VISIBLE_DESKTOP },
-    (_, i) => categories[(offset + i) % total],
+    (_, i) => sortedCategories[(offset + i) % total],
   );
+
+  // Touch handlers for mobile swipe
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.touches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (touchStart === null) return;
+    const delta = touchStart - e.touches[0].clientX;
+    setTouchDelta(delta);
+  };
+
+  const handleTouchEnd = () => {
+    if (Math.abs(touchDelta) > 50) {
+      if (touchDelta > 0) {
+        next(); // Swipe left - next
+      } else {
+        prev(); // Swipe right - prev
+      }
+    }
+    setTouchStart(null);
+    setTouchDelta(0);
+  };
+
+  if (isLoading) {
+    return (
+      <section
+        id="products"
+        className="py-14"
+        style={{ backgroundColor: "#F8FAFD" }}
+      >
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="animate-pulse">
+            <div className="h-4 w-24 bg-gray-300 rounded mb-4" />
+            <div className="h-8 w-48 bg-gray-300 rounded mb-8" />
+            <div className="grid grid-cols-6 gap-3">
+              {Array.from({ length: 6 }).map((_, i) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <div key={i} className="h-40 bg-gray-300 rounded-xl" />
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (total === 0) return null;
+
+  // Add duplicate items for infinite scroll on mobile
+  const mobileCategories = [
+    ...sortedCategories,
+    ...sortedCategories,
+    ...sortedCategories,
+  ];
 
   return (
     <section
@@ -73,6 +175,7 @@ export function CategoriesSection() {
 
         {/* CAROUSEL */}
         <section
+          ref={containerRef}
           className="relative group/carousel"
           aria-label="Danh mục sản phẩm"
           onMouseEnter={() => setPaused(true)}
@@ -118,16 +221,34 @@ export function CategoriesSection() {
             }}
           >
             {visibleDesktop.map((cat, i) => (
-              <CategoryCard key={`${cat.id}-${offset}-${i}`} cat={cat} />
+              <CategoryCard
+                key={`${cat.id}-${offset}-${i}`}
+                cat={cat}
+                style={getCategoryStyle(offset + i)}
+              />
             ))}
           </div>
 
-          {/* MOBILE SWIPE */}
-          <div className="md:hidden overflow-x-scroll no-scrollbar">
-            <div className="flex gap-3">
-              {categories.map((cat) => (
-                <div key={cat.id} className="w-1/3 flex-shrink-0">
-                  <CategoryCard cat={cat} />
+          {/* MOBILE INFINITE SWIPE */}
+          <div
+            className="md:hidden overflow-hidden"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
+            <div
+              className="flex gap-3 transition-transform duration-300"
+              style={{
+                transform: `translateX(${touchDelta}px)`,
+                width: "fit-content",
+              }}
+            >
+              {mobileCategories.map((cat, i) => (
+                <div
+                  key={`${cat.id}-${i}`}
+                  className="w-[calc(33.333%-8px)] flex-shrink-0"
+                >
+                  <CategoryCard cat={cat} style={getCategoryStyle(i % total)} />
                 </div>
               ))}
             </div>
