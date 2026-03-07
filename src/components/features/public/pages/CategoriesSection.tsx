@@ -7,7 +7,6 @@ import { CategoryCard } from "./CategoryCard";
 
 const VISIBLE_DESKTOP = 6;
 
-// Generate consistent colors based on category index
 const COLORS = [
   {
     color: "#D97706",
@@ -47,17 +46,26 @@ function getCategoryStyle(index: number) {
 
 export function CategoriesSection() {
   const { data: categories = [], isLoading } = usePublicCategories();
+
   const [offset, setOffset] = useState(0);
   const [paused, setPaused] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
 
-  // Sort by display_order
+  const containerRef = useRef<HTMLDivElement>(null);
+  const mobileScrollRef = useRef<HTMLDivElement>(null);
+  const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
+
   const sortedCategories = [...categories].sort(
     (a, b) => (a.display_order ?? 0) - (b.display_order ?? 0),
   );
 
   const total = sortedCategories.length;
-  const canSlide = total > 0; // Luôn hiện arrows khi có ít nhất 1 category
+  const canSlide = total > 0;
+
+  /*
+  -----------------------
+  DESKTOP LOGIC (GIỮ NGUYÊN)
+  -----------------------
+  */
 
   const next = useCallback(() => {
     setOffset((o) => (o + 1) % total);
@@ -70,6 +78,9 @@ export function CategoriesSection() {
   useEffect(() => {
     if (!canSlide || paused) return;
 
+    // disable auto slide on mobile
+    if (globalThis.window !== undefined && window.innerWidth < 768) return;
+
     const id = setInterval(next, 3000);
     return () => clearInterval(id);
   }, [canSlide, paused, next]);
@@ -79,34 +90,59 @@ export function CategoriesSection() {
     (_, i) => sortedCategories[(offset + i) % total],
   );
 
-  // Mobile: duplicate items 5x for infinite loop effect
+  /*
+  -----------------------
+  MOBILE INFINITE
+  -----------------------
+  */
+
   const mobileCategories = [
-    ...sortedCategories,
-    ...sortedCategories,
     ...sortedCategories,
     ...sortedCategories,
     ...sortedCategories,
   ];
 
+  useEffect(() => {
+    const el = mobileScrollRef.current;
+
+    if (!el || total === 0) return;
+
+    const singleWidth = el.scrollWidth / 3;
+
+    el.scrollLeft = singleWidth;
+  }, [total]);
+
+  const handleScroll = () => {
+    const el = mobileScrollRef.current;
+    if (!el) return;
+
+    if (scrollTimeout.current) {
+      clearTimeout(scrollTimeout.current);
+    }
+
+    scrollTimeout.current = setTimeout(() => {
+      const singleWidth = el.scrollWidth / 3;
+
+      if (el.scrollLeft < singleWidth * 0.5) {
+        el.scrollLeft += singleWidth;
+      }
+
+      if (el.scrollLeft > singleWidth * 1.5) {
+        el.scrollLeft -= singleWidth;
+      }
+    }, 120);
+  };
+
+  /*
+  -----------------------
+  LOADING
+  -----------------------
+  */
+
   if (isLoading) {
     return (
-      <section
-        id="products"
-        className="py-14"
-        style={{ backgroundColor: "#F8FAFD" }}
-      >
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="animate-pulse">
-            <div className="h-4 w-24 bg-gray-300 rounded mb-4" />
-            <div className="h-8 w-48 bg-gray-300 rounded mb-8" />
-            <div className="grid grid-cols-6 gap-3">
-              {Array.from({ length: 6 }).map((_, i) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <div key={i} className="h-40 bg-gray-300 rounded-xl" />
-              ))}
-            </div>
-          </div>
-        </div>
+      <section className="py-14" style={{ backgroundColor: "#F8FAFD" }}>
+        <div className="max-w-7xl mx-auto px-4">Loading...</div>
       </section>
     );
   }
@@ -121,24 +157,8 @@ export function CategoriesSection() {
     >
       <div className="max-w-7xl mx-auto px-4">
         {/* HEADER */}
-        <div className="mb-8">
-          <div className="flex items-center gap-2 mb-2">
-            <div
-              className="w-8 h-1 rounded-full"
-              style={{ backgroundColor: "#00897B" }}
-            />
-            <span
-              className="text-teal-700 font-semibold"
-              style={{
-                fontSize: "12px",
-                textTransform: "uppercase",
-                letterSpacing: "0.08em",
-              }}
-            >
-              Khám phá
-            </span>
-          </div>
 
+        <div className="mb-8">
           <h2
             className="text-gray-900"
             style={{
@@ -151,72 +171,80 @@ export function CategoriesSection() {
         </div>
 
         {/* CAROUSEL */}
-        <section
-          ref={containerRef}
-          className="relative group/carousel"
-          aria-label="Danh mục sản phẩm"
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
-        >
-          {/* LEFT ARROW */}
-          {canSlide && (
-            <button
-              onClick={prev}
-              className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-20
-              w-9 h-9 rounded-full bg-white border border-gray-200 shadow-lg
-              items-center justify-center text-gray-500
-              hover:border-blue-400 hover:text-blue-600 hover:shadow-xl
-              opacity-0 group-hover/carousel:opacity-100
-              transition-all duration-200"
-              aria-label="Trước"
-            >
-              <ChevronLeft size={16} />
-            </button>
-          )}
 
-          {/* RIGHT ARROW */}
-          {canSlide && (
-            <button
-              onClick={next}
-              className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-20
-              w-9 h-9 rounded-full bg-white border border-gray-200 shadow-lg
-              items-center justify-center text-gray-500
-              hover:border-blue-400 hover:text-blue-600 hover:shadow-xl
-              opacity-0 group-hover/carousel:opacity-100
-              transition-all duration-200"
-              aria-label="Tiếp"
-            >
-              <ChevronRight size={16} />
-            </button>
-          )}
-
-          {/* DESKTOP GRID */}
-          <div
-            className="hidden md:grid gap-3"
-            style={{
-              gridTemplateColumns: `repeat(${VISIBLE_DESKTOP}, minmax(0, 1fr))`,
-            }}
+        <div ref={containerRef} className="relative group/carousel">
+          <section
+            aria-label="Danh mục sản phẩm"
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
           >
-            {visibleDesktop.map((cat, i) => (
-              <CategoryCard
-                key={`${cat.id}-${offset}-${i}`}
-                cat={cat}
-                style={getCategoryStyle(offset + i)}
-              />
-            ))}
-          </div>
+            {/* LEFT */}
 
-          {/* MOBILE - HORIZONTAL SCROLL */}
-          <div className="md:hidden overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar" style={{ scrollbarWidth: 'none' }}>
-            <div className="flex gap-3 px-4" style={{ width: 'max-content' }}>
-              {mobileCategories.map((cat, i) => (
-                <div key={`mobile-${cat.id}-${i}`} className="w-[calc((100vw-32px)/3)] flex-shrink-0 snap-center">
-                  <CategoryCard cat={cat} style={getCategoryStyle(i % total)} />
-                </div>
+            {canSlide && (
+              <button
+                onClick={prev}
+                className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-20
+              w-9 h-9 rounded-full bg-white border border-gray-200 shadow-lg
+              items-center justify-center"
+              >
+                <ChevronLeft size={16} />
+              </button>
+            )}
+
+            {/* RIGHT */}
+
+            {canSlide && (
+              <button
+                onClick={next}
+                className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-20
+              w-9 h-9 rounded-full bg-white border border-gray-200 shadow-lg
+              items-center justify-center"
+              >
+                <ChevronRight size={16} />
+              </button>
+            )}
+
+            {/* DESKTOP */}
+
+            <div
+              className="hidden md:grid gap-3"
+              style={{
+                gridTemplateColumns: `repeat(${VISIBLE_DESKTOP}, minmax(0, 1fr))`,
+              }}
+            >
+              {visibleDesktop.map((cat, i) => (
+                <CategoryCard
+                  key={`${cat.id}-${offset}-${i}`}
+                  cat={cat}
+                  style={getCategoryStyle(offset + i)}
+                />
               ))}
             </div>
-          </div>
-        </section>
+
+            {/* MOBILE */}
+
+            <div
+              ref={mobileScrollRef}
+              onScroll={handleScroll}
+              className="md:hidden overflow-x-auto snap-x no-scrollbar"
+              style={{ scrollbarWidth: "none" }}
+            >
+              <div className="flex gap-3 px-4" style={{ width: "max-content" }}>
+                {mobileCategories.map((cat, i) => (
+                  <div
+                    key={`mobile-${cat.id}-${i}`}
+                    className="w-[calc((100vw-32px)/3)] flex-shrink-0 snap-center"
+                  >
+                    <CategoryCard
+                      cat={cat}
+                      style={getCategoryStyle(i % total)}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        </div>
       </div>
     </section>
   );
