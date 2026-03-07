@@ -22,5 +22,8 @@ export const queryKeys = {
       all: ["admin", "products"] as const,
       detail: (id: string) => ["admin", "products", id] as const,
     },
+    quoteRequests: {
+      all: ["admin", "quote-requests"] as const,
+    },
   },
 } as const;
