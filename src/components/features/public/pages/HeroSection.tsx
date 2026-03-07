@@ -9,6 +9,7 @@ import {
   FileCheck,
   ShieldCheck,
 } from "lucide-react";
+import { usePublicCategories } from "@/hooks/use-public-categories";
 
 const slides = [
   {
@@ -53,6 +54,7 @@ const trustBadges = [
 ];
 
 export function HeroSection() {
+  const { data: categories } = usePublicCategories();
   const [current, setCurrent] = useState(0);
   const [animating, setAnimating] = useState(false);
 
@@ -237,19 +239,21 @@ export function HeroSection() {
               className="w-full px-3 py-2.5 border border-gray-200 rounded-lg bg-gray-50 text-gray-600 focus:outline-none focus:border-teal-500 transition-all"
               style={{ fontSize: "13px" }}
             >
-              <option value="">-- Danh mục sản phẩm --</option>
-              <option>Vật tư tiêu hao</option>
-              <option>Vật tư chỉnh hình</option>
-              <option>Giấy in y tế</option>
-              <option>Khác</option>
+              <option hidden value="">
+                -- Danh mục sản phẩm --
+              </option>
+              {categories?.map((cat) => (
+                <option key={cat.id} value={cat.slug}>
+                  {cat.name}
+                </option>
+              ))}
             </select>
             <a
               href="tel:0983498177"
               className="w-full py-3 rounded-lg text-white font-semibold transition-all hover:opacity-90 flex items-center justify-center gap-2"
               style={{ backgroundColor: "#00897B", fontSize: "13px" }}
             >
-              <Phone size={13} />
-              Gọi ngay: 0983.498.177
+              Gửi yêu cầu
             </a>
           </div>
           <p

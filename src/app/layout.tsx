@@ -1,6 +1,15 @@
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import { QueryProvider } from "@/lib/query/provider";
 import "./globals.css";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Ánh Dương Phát",
+  description: "Cửa hàng vật tư y tế",
+  icons: {
+    icon: "/logo.png",
+  },
+};
 
 const inter = Inter({
   subsets: ["latin"],
