@@ -39,6 +39,8 @@ export interface ProductFilters {
   minPrice?: number;
   maxPrice?: number;
   priceType?: "FIXED" | "CONTACT";
+  isBestSeller?: boolean;
+  onSale?: boolean;
   page?: number;
   limit?: number;
 }
@@ -79,6 +81,8 @@ export class ProductPublicService {
       minPrice,
       maxPrice,
       priceType,
+      isBestSeller,
+      onSale,
       page = 1,
       limit = 12,
     } = filters;
@@ -115,6 +119,13 @@ export class ProductPublicService {
 
     if (maxPrice != null) {
       query = query.lte("price", maxPrice);
+    }
+
+    if (isBestSeller) {
+      query = query.eq("is_best_seller", true);
+    }
+    if (onSale) {
+      query = query.not("sale_price", "is", null);
     }
 
     query = query.order("sort_order", {

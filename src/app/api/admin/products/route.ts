@@ -2,7 +2,6 @@ import { ProductAdminService } from "@/services/product.admin.service";
 import { NextRequest, NextResponse } from "next/server";
 import { handleError } from "../../handle-error";
 
-// GET /api/admin/products
 export async function GET() {
   try {
     const products = await ProductAdminService.getAll();
@@ -12,11 +11,9 @@ export async function GET() {
   }
 }
 
-// POST /api/admin/products
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
-
     const raw = {
       name: formData.get("name"),
       slug: formData.get("slug"),
@@ -27,12 +24,11 @@ export async function POST(req: NextRequest) {
       sale_price: formData.get("sale_price")
         ? Number(formData.get("sale_price"))
         : undefined,
+      is_best_seller: formData.get("is_best_seller") === "true", // 👈
     };
 
     const files = formData.getAll("files") as File[];
-
     const product = await ProductAdminService.create(raw, files);
-
     return NextResponse.json({ product }, { status: 201 });
   } catch (err: any) {
     return handleError(err);

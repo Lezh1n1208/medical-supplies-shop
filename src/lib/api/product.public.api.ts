@@ -27,6 +27,8 @@ export const productPublicApi = {
       params.set("maxPrice", String(filters.maxPrice));
     if (filters.page != null) params.set("page", String(filters.page));
     if (filters.limit != null) params.set("limit", String(filters.limit));
+    if (filters.isBestSeller) params.set("isBestSeller", "true");
+    if (filters.onSale) params.set("onSale", "true");
 
     const res = await fetch(`${BASE}?${params.toString()}`);
     if (!res.ok) throw new Error((await res.json()).error);
