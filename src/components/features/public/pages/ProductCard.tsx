@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Heart, ShoppingCart, Eye, Star } from "lucide-react";
+import { Heart, ShoppingCart, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type { ProductListItem } from "@/services/product.public.service";
@@ -79,13 +79,6 @@ export function ProductCard({
                 fill: wished ? "#DC2626" : "none",
               }}
             />
-          </button>
-          <button
-            onClick={(e) => e.preventDefault()}
-            className="w-8 h-8 rounded-full bg-white shadow-md flex items-center justify-center transition-transform hover:scale-110"
-            aria-label="Xem nhanh"
-          >
-            <Eye size={14} className="text-gray-500" />
           </button>
         </div>
 
