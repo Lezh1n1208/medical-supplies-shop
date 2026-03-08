@@ -18,6 +18,7 @@ const ProductBaseSchema = z.object({
   price_type: PriceTypeEnum,
   price: z.number().nonnegative().nullable().optional(),
   sale_price: z.number().nonnegative().nullable().optional(),
+  is_best_seller: z.boolean().default(false),
 });
 
 /* =========================

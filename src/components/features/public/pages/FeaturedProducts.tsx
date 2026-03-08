@@ -1,135 +1,72 @@
 "use client";
-
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { ProductCard, ProductCardData } from "./ProductCard";
+import { ProductCard } from "./ProductCard";
+import { usePublicProducts } from "@/hooks/use-public-products";
 
-const TABS = [
-  "Tất cả",
-  "Mới nhất",
-  "Bán chạy",
-  "Khuyến mãi",
-];
+const TABS = ["Tất cả", "Mới nhất", "Bán chạy", "Khuyến mãi"] as const;
+type Tab = (typeof TABS)[number];
 
-const products: ProductCardData[] = [
-  {
-    id: 1,
-    name: "Máy theo dõi bệnh nhân đa thông số BM3",
-    brand: "Biocare",
-    price: "28.500.000",
-    oldPrice: "32.000.000",
-    img: "https://images.unsplash.com/photo-1615486511484-92e172cc4fe0?w=400&h=280&fit=crop",
-    badge: "Bán chạy",
-    badgeColor: "#DC2626",
-    rating: 4.8,
-    reviews: 24,
-    tag: "Bán chạy",
-    category: "Thiết bị chẩn đoán",
-  },
-  {
-    id: 2,
-    name: "Bộ dụng cụ phẫu thuật cơ bản 25 món",
-    brand: "Aesculap",
-    price: "4.200.000",
-    img: "https://images.unsplash.com/photo-1758653500015-e97176428d46?w=400&h=280&fit=crop",
-    badge: "Mới",
-    badgeColor: "#1565C0",
-    rating: 5,
-    reviews: 8,
-    tag: "Mới nhất",
-    category: "Dụng cụ phẫu thuật",
-  },
-  {
-    id: 3,
-    name: "Kim luồn tĩnh mạch BD Angiocath 18G (hộp 50)",
-    brand: "BD Medical",
-    price: "320.000",
-    oldPrice: "380.000",
-    img: "https://images.unsplash.com/photo-1747987766141-9d1f2707dd6c?w=400&h=280&fit=crop",
-    badge: "-16%",
-    badgeColor: "#D97706",
-    rating: 4.9,
-    reviews: 156,
-    tag: "Khuyến mãi",
-    category: "Vật tư tiêu hao",
-  },
-  {
-    id: 4,
-    name: "Máy xét nghiệm huyết học 5 phần BC-5150",
-    brand: "Mindray",
-    price: null,
-    img: "https://images.unsplash.com/photo-1768498950637-88d073faa491?w=400&h=280&fit=crop",
-    badge: "Hot",
-    badgeColor: "#7B1FA2",
-    rating: 4.7,
-    reviews: 12,
-    tag: "Bán chạy",
-    category: "Thiết bị xét nghiệm",
-  },
-  {
-    id: 5,
-    name: "Máy thở oxy dòng cao Optiflow AIRVO 2",
-    brand: "Fisher & Paykel",
-    price: null,
-    img: "https://images.unsplash.com/photo-1580281657702-257584239a55?w=400&h=280&fit=crop",
-    badge: "Mới",
-    badgeColor: "#1565C0",
-    rating: 5,
-    reviews: 6,
-    tag: "Mới nhất",
-    category: "Thiết bị ICU",
-  },
-  {
-    id: 6,
-    name: "Khẩu trang phẫu thuật 3 lớp (hộp 50 cái)",
-    brand: "Medicom",
-    price: "85.000",
-    oldPrice: "95.000",
-    img: "https://images.unsplash.com/photo-1766325693728-348c38374d33?w=400&h=280&fit=crop",
-    badge: "-11%",
-    badgeColor: "#D97706",
-    rating: 4.6,
-    reviews: 342,
-    tag: "Khuyến mãi",
-    category: "Vật tư tiêu hao",
-  },
-  {
-    id: 7,
-    name: "Máy siêu âm xách tay SonoSite iViz",
-    brand: "SonoSite",
-    price: null,
-    img: "https://images.unsplash.com/photo-1758691462848-ba1e929da259?w=400&h=280&fit=crop",
-    badge: "Bán chạy",
-    badgeColor: "#DC2626",
-    rating: 4.9,
-    reviews: 18,
-    tag: "Bán chạy",
-    category: "Thiết bị chẩn đoán",
-  },
-  {
-    id: 8,
-    name: "Giường bệnh đa năng điện 3 khúc",
-    brand: "Stryker",
-    price: "18.900.000",
-    oldPrice: "22.000.000",
-    img: "https://images.unsplash.com/photo-1755189118414-14c8dacdb082?w=400&h=280&fit=crop",
-    badge: "-14%",
-    badgeColor: "#D97706",
-    rating: 4.7,
-    reviews: 31,
-    tag: "Khuyến mãi",
-    category: "Thiết bị ICU",
-  },
-];
+// Map tab → filters
+const TAB_FILTERS: Record<Tab, Parameters<typeof usePublicProducts>[0]> = {
+  "Tất cả": {},
+  "Mới nhất": {}, // mặc định đã sort created_at desc
+  "Bán chạy": { isBestSeller: true },
+  "Khuyến mãi": { onSale: true },
+};
+
+// Skeleton card
+function ProductCardSkeleton() {
+  return (
+    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden flex flex-col animate-pulse">
+      <div className="h-[180px] bg-gray-100" />
+      <div className="p-3 flex flex-col gap-2">
+        <div className="h-3 bg-gray-100 rounded w-full" />
+        <div className="h-3 bg-gray-100 rounded w-2/3" />
+        <div className="h-4 bg-gray-100 rounded w-1/2 mt-1" />
+        <div className="h-8 bg-gray-100 rounded mt-1" />
+      </div>
+    </div>
+  );
+}
 
 export function FeaturedProducts() {
-  const [activeTab, setActiveTab] = useState("Tất cả");
+  const [activeTab, setActiveTab] = useState<Tab>("Tất cả");
 
-  const filtered =
-    activeTab === "Tất cả"
-      ? products
-      : products.filter((p) => p.tag === activeTab || p.category === activeTab);
+  const { data, isLoading, isError } = usePublicProducts({
+    ...TAB_FILTERS[activeTab],
+    limit: 8,
+  });
+
+  const renderProducts = () => {
+    if (isLoading) {
+      return Array.from({ length: 8 }).map((_, i) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <ProductCardSkeleton key={i} />
+      ));
+    }
+
+    if (isError) {
+      return (
+        <div className="col-span-full text-center py-12 text-gray-400 text-[14px]">
+          Không thể tải sản phẩm. Vui lòng thử lại sau.
+        </div>
+      );
+    }
+
+    if (!data?.items?.length) {
+      return (
+        <div className="col-span-full text-center py-12 text-gray-400 text-[14px]">
+          Không có sản phẩm nào.
+        </div>
+      );
+    }
+
+    return data.items.map((product) => (
+      <ProductCard key={product.id} product={product} showRating />
+    ));
+  };
 
   return (
     <section className="py-14" style={{ backgroundColor: "#F8FAFD" }}>
@@ -154,6 +91,7 @@ export function FeaturedProducts() {
                 Nổi bật
               </span>
             </div>
+
             <h2
               className="text-gray-900"
               style={{
@@ -185,17 +123,15 @@ export function FeaturedProducts() {
           </div>
         </div>
 
-        {/* Grid — dùng shared ProductCard */}
+        {/* Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {filtered.map((product) => (
-            <ProductCard key={product.id} product={product} showRating />
-          ))}
+          {renderProducts()}
         </div>
 
         {/* View all */}
         <div className="text-center mt-8">
           <Link
-            href="/products"
+            href="/san-pham"
             className="inline-flex items-center gap-2 px-8 py-3.5 rounded-lg border-2 font-semibold transition-all hover:bg-blue-50 hover:border-blue-400"
             style={{
               borderColor: "#1565C0",
