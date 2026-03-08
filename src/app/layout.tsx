@@ -2,6 +2,7 @@ import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import { QueryProvider } from "@/lib/query/provider";
 import "./globals.css";
 import { Metadata } from "next";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Ánh Dương Phát",
@@ -32,6 +33,7 @@ export default function RootLayout({
     <html lang="vi">
       <body className={`${inter.variable} ${jakarta.variable} antialiased`}>
         <QueryProvider>{children}</QueryProvider>
+        <Toaster position="top-right" richColors />
       </body>
     </html>
   );
