@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/lib/query/keys";
 import { productApi } from "@/lib/api/product.admin.api";
 import type { CreateProduct, UpdateProduct } from "@/schemas/product.schema";
+import { toast } from "sonner";
 
 export function useProducts() {
   return useQuery({
@@ -26,6 +27,10 @@ export function useCreateProduct() {
       productApi.create(data, files),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.admin.products.all });
+      toast.success("Tạo sản phẩm thành công");
+    },
+    onError: (err: Error) => {
+      toast.error(err.message ?? "Tạo sản phẩm thất bại");
     },
   });
 }
@@ -47,6 +52,10 @@ export function useUpdateProduct() {
       queryClient.invalidateQueries({
         queryKey: queryKeys.admin.products.detail(id),
       });
+      toast.success("Cập nhật sản phẩm thành công");
+    },
+    onError: (err: Error) => {
+      toast.error(err.message ?? "Cập nhật sản phẩm thất bại");
     },
   });
 }
@@ -57,6 +66,10 @@ export function useDeleteProduct() {
     mutationFn: (id: string) => productApi.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.admin.products.all });
+      toast.success("Xóa sản phẩm thành công");
+    },
+    onError: (err: Error) => {
+      toast.error(err.message ?? "Xóa sản phẩm thất bại");
     },
   });
 }
