@@ -10,10 +10,10 @@ type Tab = (typeof TABS)[number];
 
 // Map tab → filters
 const TAB_FILTERS: Record<Tab, Parameters<typeof usePublicProducts>[0]> = {
-  "Tất cả": {},
-  "Mới nhất": {}, // mặc định đã sort created_at desc
-  "Bán chạy": { isBestSeller: true },
-  "Khuyến mãi": { onSale: true },
+  "Tất cả": { sortBy: "created_at", sortOrder: "desc" },
+  "Mới nhất": { sortBy: "created_at", sortOrder: "desc" },
+  "Bán chạy": { isBestSeller: true, sortBy: "created_at", sortOrder: "desc" },
+  "Khuyến mãi": { onSale: true, sortBy: "sale_price", sortOrder: "asc" },
 };
 
 // Skeleton card

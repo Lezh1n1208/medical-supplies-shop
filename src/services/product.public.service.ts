@@ -41,6 +41,8 @@ export interface ProductFilters {
   priceType?: "FIXED" | "CONTACT";
   isBestSeller?: boolean;
   onSale?: boolean;
+  sortBy?: "created_at" | "sale_price" | "price" | "rating";
+  sortOrder?: "asc" | "desc";
   page?: number;
   limit?: number;
 }
@@ -85,6 +87,8 @@ export class ProductPublicService {
       onSale,
       page = 1,
       limit = 12,
+      sortBy = "created_at",
+      sortOrder = "desc",
     } = filters;
 
     // Dùng !inner khi filter theo categorySlug để Supabase
@@ -127,6 +131,8 @@ export class ProductPublicService {
     if (onSale) {
       query = query.not("sale_price", "is", null);
     }
+
+    query = query.order(sortBy, { ascending: sortOrder === "asc" });
 
     query = query.order("sort_order", {
       referencedTable: "product_images",

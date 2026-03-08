@@ -23,6 +23,11 @@ export async function GET(req: NextRequest) {
         : undefined,
       isBestSeller: searchParams.get("isBestSeller") === "true" || undefined,
       onSale: searchParams.get("onSale") === "true" || undefined,
+      sortBy:
+        (searchParams.get("sortBy") as ProductFilters["sortBy"]) ?? undefined,
+      sortOrder:
+        (searchParams.get("sortOrder") as ProductFilters["sortOrder"]) ??
+        undefined,
       page: searchParams.get("page") ? Number(searchParams.get("page")) : 1,
       limit: searchParams.get("limit") ? Number(searchParams.get("limit")) : 12,
     };

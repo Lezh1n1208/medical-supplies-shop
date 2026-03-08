@@ -25,10 +25,12 @@ export const productPublicApi = {
       params.set("minPrice", String(filters.minPrice));
     if (filters.maxPrice != null)
       params.set("maxPrice", String(filters.maxPrice));
-    if (filters.page != null) params.set("page", String(filters.page));
-    if (filters.limit != null) params.set("limit", String(filters.limit));
     if (filters.isBestSeller) params.set("isBestSeller", "true");
     if (filters.onSale) params.set("onSale", "true");
+    if (filters.sortBy) params.set("sortBy", filters.sortBy);
+    if (filters.sortOrder) params.set("sortOrder", filters.sortOrder);
+    if (filters.page != null) params.set("page", String(filters.page));
+    if (filters.limit != null) params.set("limit", String(filters.limit));
 
     const res = await fetch(`${BASE}?${params.toString()}`);
     if (!res.ok) throw new Error((await res.json()).error);
