@@ -33,7 +33,15 @@ export default function RootLayout({
     <html lang="vi">
       <body className={`${inter.variable} ${jakarta.variable} antialiased`}>
         <QueryProvider>{children}</QueryProvider>
-        <Toaster position="top-right" richColors />
+        <Toaster
+          position="top-right"
+          richColors
+          toastOptions={{
+            style: {
+              fontFamily: "var(--font-jakarta)",
+            },
+          }}
+        />
       </body>
     </html>
   );
