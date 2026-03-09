@@ -89,7 +89,7 @@ export default function ProductsPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="flex flex-col lg:grid lg:grid-cols-[220px_1fr] lg:grid-rows-[auto_1fr] gap-6">
+        <div className="flex flex-col lg:grid lg:grid-cols-[220px_1fr] lg:grid-rows-[auto_1fr]">
           {/* Toolbar */}
           <div className="lg:col-span-2 lg:row-start-1">
             <ProductToolbar
