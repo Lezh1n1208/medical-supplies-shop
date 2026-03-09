@@ -97,28 +97,6 @@ export function WhyUsSection() {
               chính thức của hơn 50 thương hiệu y tế hàng đầu thế giới.
             </p>
 
-            {/* Key numbers */}
-            <div className="grid grid-cols-3 gap-4 mb-8 py-6 border-y border-gray-100">
-              {[
-                { val: "500+", label: "Khách hàng B2B" },
-                { val: "1.200+", label: "Sản phẩm" },
-                { val: "15 năm", label: "Kinh nghiệm" },
-              ].map((item, i) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <div key={i} className="text-center">
-                  <div
-                    className="font-black"
-                    style={{ fontSize: "1.5rem", color: "#0D2B6E" }}
-                  >
-                    {item.val}
-                  </div>
-                  <div className="text-gray-500" style={{ fontSize: "12px" }}>
-                    {item.label}
-                  </div>
-                </div>
-              ))}
-            </div>
-
             <a
               href="/about"
               className="inline-flex items-center gap-2 px-6 py-3.5 rounded-lg text-white font-semibold transition-all hover:opacity-90 hover:scale-105"
