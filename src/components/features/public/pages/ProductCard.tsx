@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Heart, ShoppingCart, Star } from "lucide-react";
+import { Heart, ShoppingCart, Star, Phone } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type { ProductListItem } from "@/services/product.public.service";
+
+const ZALO_URL = "https://zalo.me/0983498177";
 
 interface ProductCardProps {
   product: ProductListItem;
@@ -23,24 +25,21 @@ export function ProductCard({
 
   const isContact = product.price_type === "CONTACT";
   const rating = Math.floor(product.rating ?? 0);
-
   const thumbnail =
     product.product_images.find((img) => img.is_thumbnail) ??
     product.product_images[0];
-
   const hasSale =
-    product.sale_price !== null &&
+    product.sale_price != null &&
     product.sale_price !== undefined &&
-    product.price !== null &&
+    product.price != null &&
     product.price !== undefined;
-
   const finalPrice = hasSale ? product.sale_price : product.price;
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group flex flex-col">
       {/* IMAGE */}
       <Link
-        href={`/san-pham/${product.slug}`}
+        href={`/products/${product.slug}`} // ← fix: was /san-pham/
         className="relative overflow-hidden h-[180px] block"
       >
         {thumbnail ? (
@@ -57,20 +56,17 @@ export function ProductCard({
           </div>
         )}
 
-        {/* BADGE */}
         {hasSale && (
           <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md text-white font-bold text-[10px] bg-red-500">
             Khuyến mãi
           </div>
         )}
-
         {product.is_best_seller && !hasSale && (
           <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md text-white font-bold text-[10px] bg-blue-600">
             Bán chạy
           </div>
         )}
 
-        {/* ACTION */}
         <div className="absolute top-2 right-2 flex flex-col gap-1.5 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200">
           <button
             onClick={(e) => {
@@ -90,7 +86,6 @@ export function ProductCard({
           </button>
         </div>
 
-        {/* CATEGORY */}
         {product.categories && (
           <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded-md text-white font-medium text-[10px] bg-black/60">
             {product.categories.name}
@@ -100,14 +95,12 @@ export function ProductCard({
 
       {/* INFO */}
       <div className="p-3 flex flex-col flex-1">
-        {/* NAME */}
-        <Link href={`/san-pham/${product.slug}`}>
+        <Link href={`/products/${product.slug}`}>
           <p className="text-gray-800 text-[13px] font-semibold leading-snug mb-2 line-clamp-2 min-h-[40px] hover:text-blue-700 transition-colors">
             {product.name}
           </p>
         </Link>
 
-        {/* RATING */}
         {showRating && (
           <div className="flex items-center gap-1 mb-2">
             {Array.from({ length: 5 }).map((_, i) => (
@@ -124,7 +117,6 @@ export function ProductCard({
           </div>
         )}
 
-        {/* PRICE */}
         <div className="mb-3">
           {isContact ? (
             <span className="font-bold text-[12px] text-purple-700">
@@ -137,7 +129,6 @@ export function ProductCard({
                   {formatPrice(product.price)}đ
                 </span>
               )}
-
               {finalPrice && (
                 <span className="font-bold text-[14px] text-red-600">
                   {formatPrice(finalPrice)}đ
@@ -147,11 +138,28 @@ export function ProductCard({
           )}
         </div>
 
-        {/* CTA */}
-        <button className="w-full py-2 rounded-lg text-white font-semibold text-[12px] bg-teal-600 hover:opacity-90 active:scale-95 flex items-center justify-center gap-1.5 mt-auto">
-          <ShoppingCart size={12} />
-          Đặt mua
-        </button>
+        {/* CTA ← fix: conditional by price_type, both link to Zalo */}
+        {isContact ? (
+          <a
+            href={ZALO_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full py-2 rounded-lg text-white font-semibold text-[12px] bg-blue-700 hover:opacity-90 flex items-center justify-center gap-1.5 mt-auto"
+          >
+            <Phone size={12} />
+            Liên hệ báo giá
+          </a>
+        ) : (
+          <a
+            href={ZALO_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full py-2 rounded-lg text-white font-semibold text-[12px] bg-teal-600 hover:opacity-90 active:scale-95 flex items-center justify-center gap-1.5 mt-auto"
+          >
+            <ShoppingCart size={12} />
+            Đặt mua
+          </a>
+        )}
       </div>
     </div>
   );
