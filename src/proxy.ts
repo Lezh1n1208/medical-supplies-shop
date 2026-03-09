@@ -13,7 +13,10 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  if (pathname.startsWith("/api/admin")) {
+  if (
+    pathname.startsWith("/api/admin") &&
+    !pathname.startsWith("/api/admin/login")
+  ) {
     if (!isValid) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }

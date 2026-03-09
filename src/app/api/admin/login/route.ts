@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
   }
 
-  setAdminSession();
+  await setAdminSession();
 
   return NextResponse.json({ success: true });
 }

@@ -1,3 +1,5 @@
+"use client";
+
 import { useAdminCategories } from "@/hooks/use-admin-categories";
 import { useAdminProducts } from "@/hooks/use-admin-products";
 import { useAdminQuoteRequests } from "@/hooks/use-admin-quote-requests";

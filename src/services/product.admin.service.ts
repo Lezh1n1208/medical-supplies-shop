@@ -8,9 +8,72 @@ import {
 import { ProductImageAdminService } from "./product-image.admin.service";
 
 /* ========================
+   FILTERS
+======================== */
+export interface AdminProductFilters {
+  search?: string;
+  categoryId?: string;
+  priceType?: "FIXED" | "CONTACT";
+  sortBy?: "name" | "price" | "created_at" | "rating";
+  sortOrder?: "asc" | "desc";
+  page?: number;
+  limit?: number;
+}
+
+export interface AdminProductListResult {
+  items: ReturnType<typeof ProductSchema.parse>[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+/* ========================
    SERVICE
 ======================== */
 export class ProductAdminService {
+  static async list(
+    filters: AdminProductFilters = {},
+  ): Promise<AdminProductListResult> {
+    const {
+      search,
+      categoryId,
+      priceType,
+      sortBy = "created_at",
+      sortOrder = "desc",
+      page = 1,
+      limit = 20,
+    } = filters;
+
+    let query = supabaseAdmin.from("products").select("*", { count: "exact" });
+
+    if (search) {
+      query = query.ilike("name", `%${search}%`);
+    }
+    if (categoryId) {
+      query = query.eq("category_id", categoryId);
+    }
+    if (priceType) {
+      query = query.eq("price_type", priceType);
+    }
+
+    query = query.order(sortBy, { ascending: sortOrder === "asc" });
+
+    const from = (page - 1) * limit;
+    query = query.range(from, from + limit - 1);
+
+    const { data, error, count } = await query;
+    assertNoError(error);
+
+    return {
+      items: ProductSchema.array().parse(data),
+      total: count ?? 0,
+      page,
+      limit,
+      totalPages: count ? Math.ceil(count / limit) : 0,
+    };
+  }
+
   static async getAll() {
     const { data, error } = await supabaseAdmin
       .from("products")
@@ -44,12 +107,10 @@ export class ProductAdminService {
     assertNoError(error);
     const product = ProductSchema.parse(result);
 
-    // Upload image — rollback product if upload fail
     if (files.length > 0) {
       try {
         await ProductImageAdminService.uploadMany(product.id, files);
       } catch (err) {
-        // Upload thất bại → xóa product vừa tạo để tránh orphan record
         await supabaseAdmin.from("products").delete().eq("id", product.id);
         throw err;
       }

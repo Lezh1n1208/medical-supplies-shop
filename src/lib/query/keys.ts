@@ -1,7 +1,7 @@
 import type { ProductFilters } from "@/services/product.public.service";
+import type { AdminProductFilters } from "@/services/product.admin.service";
 
 export const queryKeys = {
-  // Public
   categories: {
     all: ["categories"] as const,
     detail: (slug: string) => ["categories", slug] as const,
@@ -12,7 +12,6 @@ export const queryKeys = {
     detail: (slug: string) => ["products", slug] as const,
   },
 
-  // Admin — tách riêng để tránh cache collision
   admin: {
     categories: {
       all: ["admin", "categories"] as const,
@@ -20,6 +19,8 @@ export const queryKeys = {
     },
     products: {
       all: ["admin", "products"] as const,
+      list: (filters: AdminProductFilters) =>
+        ["admin", "products", "list", filters] as const,
       detail: (id: string) => ["admin", "products", id] as const,
     },
     quoteRequests: {

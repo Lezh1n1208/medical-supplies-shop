@@ -55,9 +55,9 @@ function ProductNotFound() {
 
 export default function ProductDetailPage({
   params,
-}: {
+}: Readonly<{
   params: Promise<{ id: string }>;
-}) {
+}>) {
   const { id: slug } = use(params);
   const { data: product, isLoading, isError } = usePublicProduct(slug);
 

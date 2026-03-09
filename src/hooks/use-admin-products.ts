@@ -5,11 +5,12 @@ import { queryKeys } from "@/lib/query/keys";
 import { productApi } from "@/lib/api/product.admin.api";
 import type { CreateProduct, UpdateProduct } from "@/schemas/product.schema";
 import { toast } from "sonner";
+import { AdminProductFilters } from "@/services/product.admin.service";
 
-export function useAdminProducts() {
+export function useAdminProducts(filters: AdminProductFilters = {}) {
   return useQuery({
-    queryKey: queryKeys.admin.products.all,
-    queryFn: productApi.getAll,
+    queryKey: queryKeys.admin.products.list(filters),
+    queryFn: () => productApi.list(filters),
   });
 }
 
