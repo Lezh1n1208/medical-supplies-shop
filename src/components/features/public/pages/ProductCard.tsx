@@ -23,10 +23,18 @@ export function ProductCard({
 
   const isContact = product.price_type === "CONTACT";
   const rating = Math.floor(product.rating ?? 0);
+
   const thumbnail =
     product.product_images.find((img) => img.is_thumbnail) ??
     product.product_images[0];
-  const hasSale = product.sale_price != null && product.price != null;
+
+  const hasSale =
+    product.sale_price !== null &&
+    product.sale_price !== undefined &&
+    product.price !== null &&
+    product.price !== undefined;
+
+  const finalPrice = hasSale ? product.sale_price : product.price;
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group flex flex-col">
@@ -44,7 +52,6 @@ export function ProductCard({
             sizes="(max-width: 768px) 50vw, 25vw"
           />
         ) : (
-          // Placeholder khi không có ảnh
           <div className="w-full h-full bg-gray-100 flex items-center justify-center">
             <span className="text-gray-300 text-[12px]">Chưa có ảnh</span>
           </div>
@@ -56,13 +63,14 @@ export function ProductCard({
             Khuyến mãi
           </div>
         )}
+
         {product.is_best_seller && !hasSale && (
           <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md text-white font-bold text-[10px] bg-blue-600">
             Bán chạy
           </div>
         )}
 
-        {/* ACTION BUTTONS */}
+        {/* ACTION */}
         <div className="absolute top-2 right-2 flex flex-col gap-1.5 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200">
           <button
             onClick={(e) => {
@@ -94,7 +102,7 @@ export function ProductCard({
       <div className="p-3 flex flex-col flex-1">
         {/* NAME */}
         <Link href={`/san-pham/${product.slug}`}>
-          <p className="text-gray-800 text-[13px] font-semibold leading-snug mb-2 line-clamp-2 flex-1 hover:text-blue-700 transition-colors">
+          <p className="text-gray-800 text-[13px] font-semibold leading-snug mb-2 line-clamp-2 min-h-[40px] hover:text-blue-700 transition-colors">
             {product.name}
           </p>
         </Link>
@@ -124,20 +132,23 @@ export function ProductCard({
             </span>
           ) : (
             <>
-              {hasSale && (
+              {hasSale && product.price && (
                 <span className="text-gray-400 line-through mr-2 text-[11px]">
-                  {formatPrice(product.price!)}đ
+                  {formatPrice(product.price)}đ
                 </span>
               )}
-              <span className="font-bold text-[14px] text-red-600">
-                {formatPrice(hasSale ? product.sale_price! : product.price!)}đ
-              </span>
+
+              {finalPrice && (
+                <span className="font-bold text-[14px] text-red-600">
+                  {formatPrice(finalPrice)}đ
+                </span>
+              )}
             </>
           )}
         </div>
 
-        {/* CTA — luôn là "Đặt mua" */}
-        <button className="w-full py-2 rounded-lg text-white font-semibold text-[12px] bg-teal-600 hover:opacity-90 active:scale-95 flex items-center justify-center gap-1.5">
+        {/* CTA */}
+        <button className="w-full py-2 rounded-lg text-white font-semibold text-[12px] bg-teal-600 hover:opacity-90 active:scale-95 flex items-center justify-center gap-1.5 mt-auto">
           <ShoppingCart size={12} />
           Đặt mua
         </button>
