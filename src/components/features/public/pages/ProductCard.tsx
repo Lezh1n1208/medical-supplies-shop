@@ -39,7 +39,7 @@ export function ProductCard({
     <div className="bg-white rounded-xl border border-gray-200 overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group flex flex-col">
       {/* IMAGE */}
       <Link
-        href={`/products/${product.slug}`} // ← fix: was /san-pham/
+        href={`/products/${product.slug}`}
         className="relative overflow-hidden h-[180px] block"
       >
         {thumbnail ? (

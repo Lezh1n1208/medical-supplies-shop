@@ -98,7 +98,7 @@ export function SiteHeader() {
     const value = searchVal.trim();
 
     if (value) {
-      router.push(`/san-pham?search=${encodeURIComponent(value)}`);
+      router.push(`/products?search=${encodeURIComponent(value)}`);
     }
   };
 

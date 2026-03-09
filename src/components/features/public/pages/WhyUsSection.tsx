@@ -120,7 +120,7 @@ export function WhyUsSection() {
             </div>
 
             <a
-              href="#contact"
+              href="/about"
               className="inline-flex items-center gap-2 px-6 py-3.5 rounded-lg text-white font-semibold transition-all hover:opacity-90 hover:scale-105"
               style={{ backgroundColor: "#1565C0", fontSize: "14px" }}
             >

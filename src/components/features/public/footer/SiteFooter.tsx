@@ -5,9 +5,9 @@ import { Phone, Mail, MapPin, ArrowRight } from "lucide-react";
 // ── Data ────────────────────────────────────────────────────────────────────
 
 const productLinks = [
-  { label: "Vật tư tiêu hao", href: "/san-pham?category=vat-tu-tieu-hao" },
-  { label: "Vật tư chỉnh hình", href: "/san-pham?category=chinh-hinh" },
-  { label: "Giấy in y tế", href: "/san-pham?category=giay-in" },
+  { label: "Vật tư tiêu hao", href: "/products?category=vat-tu-tieu-hao" },
+  { label: "Vật tư chỉnh hình", href: "/products?category=chinh-hinh" },
+  { label: "Giấy in y tế", href: "/products?category=giay-in" },
 ];
 
 const serviceLinks = [

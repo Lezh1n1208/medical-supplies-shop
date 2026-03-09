@@ -20,7 +20,7 @@ export function CategoryCard({
 }: Readonly<CategoryCardProps>) {
   return (
     <Link
-      href={`/san-pham?category=${cat.slug}`}
+      href={`/products?category=${cat.slug}`}
       className="group relative rounded-xl overflow-hidden border-2 flex flex-col
                  transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
       style={{ borderColor: style.borderColor, background: style.bg }}

@@ -34,7 +34,7 @@ export function CategoryDropdown({
     return sortedCategories.map((cat) => (
       <Link
         key={cat.id}
-        href={`/san-pham?categorySlug=${cat.slug}`}
+        href={`/products?categorySlug=${cat.slug}`}
         onClick={onClose}
         className="flex items-center gap-2 px-4 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-blue-700 text-[13px] transition-colors"
       >
