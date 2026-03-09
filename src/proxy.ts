@@ -5,7 +5,7 @@ import { verifyAdminSession } from "@/lib/auth";
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const session = request.cookies.get("admin_session")?.value;
-  const isValid = await verifyAdminSession(session);
+  const isValid = verifyAdminSession(session);
 
   if (pathname.startsWith("/admin") && !pathname.startsWith("/admin/login")) {
     if (!isValid) {

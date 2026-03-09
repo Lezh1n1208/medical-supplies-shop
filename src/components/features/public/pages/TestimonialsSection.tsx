@@ -5,54 +5,56 @@ import { ChevronLeft, ChevronRight, Quote, Star } from "lucide-react";
 const testimonials = [
   {
     id: 1,
-    name: "PGS.TS. Nguyễn Văn Thành",
-    role: "Trưởng Khoa ICU",
-    hospital: "Bệnh viện Bạch Mai, Hà Nội",
-    avatar: "NT",
+    name: "BS.CKII. Trần Văn Nam",
+    role: "Trưởng Khoa Chấn thương Chỉnh hình",
+    hospital: "Bệnh viện Đa khoa Khu vực",
+    avatar: "VN",
     avatarColor: "#1565C0",
-    text: "MedPro Việt Nam đã cung cấp cho chúng tôi các thiết bị ICU chất lượng cao, đúng tiến độ và đầy đủ hồ sơ pháp lý. Đội ngũ kỹ thuật hỗ trợ lắp đặt và vận hành rất chuyên nghiệp. Chúng tôi đã duy trì hợp tác hơn 8 năm và hoàn toàn hài lòng.",
+    text: "Nguồn cung cấp các loại băng bó bột sợi thủy tinh và vật tư chỉnh hình của công ty luôn đảm bảo chất lượng, độ cứng và tính thoáng khí cao. Hàng hóa đa dạng chủng loại, đáp ứng rất tốt nhu cầu phẫu thuật và phục hồi chức năng của khoa chúng tôi.",
     rating: 5,
-    tag: "Thiết bị ICU",
+    tag: "Vật tư & Chỉnh hình",
   },
   {
     id: 2,
-    name: "TS.BS. Trần Thị Hương",
-    role: "Giám đốc Trung tâm Phẫu thuật",
-    hospital: "Bệnh viện Chợ Rẫy, TP.HCM",
-    avatar: "TH",
+    name: "ThS. Lê Thị Mai",
+    role: "Trưởng Phòng Vật tư Y tế",
+    hospital: "Bệnh viện Đa khoa Quốc tế",
+    avatar: "LM",
     avatarColor: "#00897B",
-    text: "Chúng tôi đã nhập hàng trăm bộ dụng cụ phẫu thuật từ MedPro. Sản phẩm đảm bảo tiêu chuẩn CE, giá cạnh tranh hơn 15-20% so với các nhà cung cấp khác. Điều tôi đánh giá cao nhất là dịch vụ tư vấn chuyên sâu và hỗ trợ hồ sơ đấu thầu.",
+    text: "Điều tôi đánh giá cao nhất là danh mục vật tư tiêu hao cực kỳ phong phú, từ ống nội khí quản, xốp cầm máu đến các dung dịch khử khuẩn chuyên dụng. Đầy đủ giấy tờ chứng nhận pháp lý, quy trình báo giá chuyên nghiệp và giao hàng rất đúng hẹn.",
     rating: 5,
-    tag: "Dụng cụ phẫu thuật",
+    tag: "Vật tư tiêu hao",
   },
   {
     id: 3,
-    name: "ThS. Lê Minh Quang",
-    role: "Quản lý Thiết bị Y tế",
-    hospital: "Bệnh viện Đại học Y Dược TP.HCM",
-    avatar: "MQ",
+    name: "BS. Phạm Quang Huy",
+    role: "Giám đốc Phòng khám",
+    hospital: "Phòng khám Đa khoa Trí Tâm",
+    avatar: "QH",
     avatarColor: "#7B1FA2",
-    text: "Nguồn hàng của MedPro rất đa dạng và ổn định. Điều quan trọng với chúng tôi là đầy đủ CO/CQ cho mọi sản phẩm. Đội ngũ bán hàng tư vấn tận tình, giao hàng đúng hạn. Đặc biệt là chính sách bảo hành sau bán hàng rất tốt.",
+    text: "Là phòng khám tư nhân, chúng tôi thường xuyên nhập các loại giấy in điện tim, giấy in siêu âm và trang thiết bị y tế cơ bản. Chất lượng giấy in hiển thị sóng rất rõ nét, giá cả cạnh tranh. Đội ngũ tư vấn nhiệt tình và hỗ trợ xử lý đơn hàng nhanh chóng.",
     rating: 5,
-    tag: "Vật tư tiêu hao",
+    tag: "Giấy in & Thiết bị",
   },
   {
     id: 4,
-    name: "BS. Phạm Thị Lan",
-    role: "Chủ phòng khám",
-    hospital: "Phòng khám Đa khoa Sài Gòn Quốc tế",
-    avatar: "PL",
+    name: "Dược sĩ Nguyễn Hoàng Long",
+    role: "Giám đốc Mua hàng",
+    hospital: "Hệ thống Y tế Tư nhân",
+    avatar: "HL",
     avatarColor: "#D97706",
-    text: "Là phòng khám tư nhân, tôi cần nguồn vật tư ổn định với giá hợp lý. MedPro đáp ứng được cả hai yêu cầu này, cộng thêm việc giao hàng nhanh trong 24h tại TP.HCM. Hotline hỗ trợ 24/7 thực sự rất hữu ích trong những tình huống khẩn cấp.",
+    text: "Đây là đối tác cung ứng chiến lược của chúng tôi trong nhiều năm qua. Nguồn hàng luôn ổn định, kể cả trong những giai đoạn thị trường khan hiếm. Các chính sách hỗ trợ giá và công nợ linh hoạt giúp chúng tôi tối ưu chi phí vận hành rất hiệu quả.",
     rating: 5,
-    tag: "Vật tư tiêu hao",
+    tag: "Đối tác Chiến lược",
   },
 ];
 
 export function TestimonialsSection() {
   const [current, setCurrent] = useState(0);
+
   const prev = () =>
     setCurrent((c) => (c - 1 + testimonials.length) % testimonials.length);
+
   const next = () => setCurrent((c) => (c + 1) % testimonials.length);
 
   const visible = [
@@ -85,12 +87,14 @@ export function TestimonialsSection() {
             </span>
             <div className="w-8 h-1 rounded-full bg-teal-400" />
           </div>
+
           <h2
             className="text-white"
             style={{ fontSize: "clamp(1.4rem, 3vw, 1.8rem)", fontWeight: 800 }}
           >
             Đánh Giá Từ Khách Hàng
           </h2>
+
           <p className="text-blue-200 mt-2" style={{ fontSize: "14px" }}>
             Niềm tin của hơn 500 bệnh viện và phòng khám trên toàn quốc
           </p>
@@ -100,7 +104,7 @@ export function TestimonialsSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
           {visible.map((item, i) => (
             <div
-              key={item.id + "-" + i}
+              key={`${item.id}-${i}`}
               className="bg-white rounded-2xl p-6 relative transition-all"
               style={{ opacity: i === 0 ? 1 : 0.85 }}
             >
@@ -114,8 +118,9 @@ export function TestimonialsSection() {
 
               {/* Rating */}
               <div className="flex gap-0.5 mb-3">
-                {[...Array(item.rating)].map((_, j) => (
+                {Array.from({ length: item.rating }).map((_, j) => (
                   <Star
+                    // eslint-disable-next-line react/no-array-index-key
                     key={j}
                     size={14}
                     style={{ color: "#F59E0B", fill: "#F59E0B" }}
@@ -155,6 +160,7 @@ export function TestimonialsSection() {
                 >
                   {item.avatar}
                 </div>
+
                 <div>
                   <p
                     className="font-bold text-gray-900"
@@ -162,9 +168,11 @@ export function TestimonialsSection() {
                   >
                     {item.name}
                   </p>
+
                   <p className="text-gray-500" style={{ fontSize: "12px" }}>
                     {item.role}
                   </p>
+
                   <p
                     className="text-blue-600"
                     style={{ fontSize: "12px", fontWeight: 600 }}
@@ -185,9 +193,11 @@ export function TestimonialsSection() {
           >
             <ChevronLeft size={18} />
           </button>
+
           <div className="flex gap-2">
             {testimonials.map((_, i) => (
               <button
+                // eslint-disable-next-line react/no-array-index-key
                 key={i}
                 onClick={() => setCurrent(i)}
                 className="rounded-full transition-all"
@@ -200,6 +210,7 @@ export function TestimonialsSection() {
               />
             ))}
           </div>
+
           <button
             onClick={next}
             className="w-10 h-10 rounded-full flex items-center justify-center text-white border border-white/30 hover:bg-white/20 transition-all"

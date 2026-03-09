@@ -6,14 +6,14 @@ import { productApi } from "@/lib/api/product.admin.api";
 import type { CreateProduct, UpdateProduct } from "@/schemas/product.schema";
 import { toast } from "sonner";
 
-export function useProducts() {
+export function useAdminProducts() {
   return useQuery({
     queryKey: queryKeys.admin.products.all,
     queryFn: productApi.getAll,
   });
 }
 
-export function useProduct(id: string) {
+export function useAdminProduct(id: string) {
   return useQuery({
     queryKey: queryKeys.admin.products.detail(id),
     queryFn: () => productApi.getById(id),

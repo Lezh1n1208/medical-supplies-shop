@@ -6,14 +6,14 @@ import type { CreateCategory, UpdateCategory } from "@/schemas/category.schema";
 import { queryKeys } from "@/lib/query/keys";
 import { toast } from "sonner";
 
-export function useCategories() {
+export function useAdminCategories() {
   return useQuery({
     queryKey: queryKeys.admin.categories.all,
     queryFn: categoryApi.getAll,
   });
 }
 
-export function useCategory(id: string) {
+export function useAdminCategory(id: string) {
   return useQuery({
     queryKey: queryKeys.admin.categories.detail(id),
     queryFn: () => categoryApi.getById(id),

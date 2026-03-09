@@ -1,8 +1,11 @@
-import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import { Inter, Plus_Jakarta_Sans, Geist } from "next/font/google";
 import { QueryProvider } from "@/lib/query/provider";
 import "./globals.css";
 import { Metadata } from "next";
 import { Toaster } from "sonner";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
   title: "Ánh Dương Phát",
@@ -30,7 +33,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi">
+    <html lang="vi" className={cn("font-sans", geist.variable)}>
       <body className={`${inter.variable} ${jakarta.variable} antialiased`}>
         <QueryProvider>{children}</QueryProvider>
         <Toaster
