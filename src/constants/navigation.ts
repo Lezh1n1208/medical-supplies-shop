@@ -6,9 +6,9 @@ export interface NavLink {
 
 export const NAV_LINKS: NavLink[] = [
   { label: "Trang chủ", href: "/" },
-  { label: "Sản phẩm", href: "/products" },
-  { label: "Dịch vụ", href: "/service" },
-  { label: "Giới thiệu", href: "/about" },
-  { label: "Tin tức", href: "/news" },
-  { label: "Liên hệ", href: "/contact" },
+  { label: "Sản phẩm", href: "/san-pham" },
+  { label: "Dịch vụ", href: "/dich-vu" },
+  { label: "Giới thiệu", href: "/gioi-thieu" },
+  { label: "Tin tức", href: "/tin-tuc" },
+  { label: "Liên hệ", href: "/lien-he" },
 ];

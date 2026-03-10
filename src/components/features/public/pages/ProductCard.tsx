@@ -39,7 +39,7 @@ export function ProductCard({
     <div className="bg-white rounded-xl border border-gray-200 overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group flex flex-col">
       {/* IMAGE */}
       <Link
-        href={`/products/${product.slug}`}
+        href={`/san-pham/${product.slug}`}
         className="relative overflow-hidden h-[180px] block"
       >
         {thumbnail ? (
@@ -95,7 +95,7 @@ export function ProductCard({
 
       {/* INFO */}
       <div className="p-3 flex flex-col flex-1">
-        <Link href={`/products/${product.slug}`}>
+        <Link href={`/san-pham/${product.slug}`}>
           <p className="text-gray-800 text-[13px] font-semibold leading-snug mb-2 line-clamp-2 min-h-[40px] hover:text-blue-700 transition-colors">
             {product.name}
           </p>

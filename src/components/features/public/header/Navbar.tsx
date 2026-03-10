@@ -85,7 +85,7 @@ export function Navbar({ isScrolled }: Readonly<NavbarProps>) {
                   sortedCategories.map((cat) => (
                     <Link
                       key={cat.id}
-                      href={`/products?categorySlug=${cat.slug}`}
+                      href={`/san-pham?categorySlug=${cat.slug}`}
                       onClick={() => setCategoryOpen(false)}
                       className="flex items-center px-4 py-2.5 text-white text-[13px] hover:opacity-80 transition-opacity whitespace-nowrap overflow-hidden text-ellipsis"
                     >

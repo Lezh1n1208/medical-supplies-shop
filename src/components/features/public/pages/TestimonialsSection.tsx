@@ -96,7 +96,7 @@ export function TestimonialsSection() {
           </h2>
 
           <p className="text-blue-200 mt-2" style={{ fontSize: "14px" }}>
-            Niềm tin của hơn 500 bệnh viện và phòng khám trên toàn quốc
+            Niềm tin của các bệnh viện và phòng khám trên toàn quốc
           </p>
         </div>
 

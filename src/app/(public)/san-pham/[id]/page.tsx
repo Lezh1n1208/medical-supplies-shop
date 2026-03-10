@@ -42,7 +42,7 @@ function ProductNotFound() {
         Sản phẩm này không tồn tại hoặc đã bị xóa.
       </p>
       <Link
-        href="/products"
+        href="/san-pham"
         className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-white font-semibold hover:opacity-90 transition-all"
         style={{ backgroundColor: "#1565C0", fontSize: "14px" }}
       >

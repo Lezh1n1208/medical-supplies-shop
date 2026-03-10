@@ -25,7 +25,7 @@ export function ProductBreadcrumb({
       </Link>
       <ChevronRight size={13} className="text-gray-300 flex-shrink-0" />
       <Link
-        href="/products"
+        href="/san-pham"
         className="text-gray-500 hover:text-blue-600 transition-colors"
       >
         Sản phẩm
@@ -34,7 +34,7 @@ export function ProductBreadcrumb({
         <>
           <ChevronRight size={13} className="text-gray-300 flex-shrink-0" />
           <Link
-            href={`/products?categorySlug=${categorySlug}`}
+            href={`/san-pham?categorySlug=${categorySlug}`}
             className="text-gray-500 hover:text-blue-600 transition-colors"
           >
             {categoryName}

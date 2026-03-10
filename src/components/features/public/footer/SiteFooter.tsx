@@ -1,14 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { Phone, Mail, MapPin, ArrowRight } from "lucide-react";
-
-// ── Data ────────────────────────────────────────────────────────────────────
-
-const productLinks = [
-  { label: "Vật tư tiêu hao", href: "/products?category=vat-tu-tieu-hao" },
-  { label: "Vật tư chỉnh hình", href: "/products?category=chinh-hinh" },
-  { label: "Giấy in y tế", href: "/products?category=giay-in" },
-];
+import { CategoryLinks } from "./CategoryLinks";
 
 const serviceLinks = [
   { label: "Tư vấn & Báo giá", href: "/dich-vu" },
@@ -64,7 +59,9 @@ export function SiteFooter() {
                 className="text-blue-200 mb-6"
                 style={{ fontSize: "13px", lineHeight: 1.8 }}
               >
-                Chuyên cung cấp và phân phối vật tư – trang thiết bị y tế đạt chuẩn, nguồn gốc rõ ràng, giá hợp lý. Cam kết uy tín, chất lượng và phát triển bền vững.
+                Chuyên cung cấp và phân phối vật tư – trang thiết bị y tế đạt
+                chuẩn, nguồn gốc rõ ràng, giá hợp lý. Cam kết uy tín, chất lượng
+                và phát triển bền vững.
               </p>
 
               <div className="flex gap-3">
@@ -121,27 +118,12 @@ export function SiteFooter() {
               </div>
             </div>
 
-            {/* ── Sản phẩm ───────────────────────── */}
+            {/* ── Danh mục ───────────────────────── */}
             <div className="lg:col-span-2">
               <h4 className="text-white mb-4 text-sm font-bold uppercase tracking-wider">
-                Sản phẩm
+                Danh mục
               </h4>
-              <ul className="space-y-2">
-                {productLinks.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="flex items-center gap-2 text-blue-200 hover:text-white transition-colors group text-sm"
-                    >
-                      <ArrowRight
-                        size={12}
-                        className="opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all"
-                      />
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+              <CategoryLinks />
             </div>
 
             {/* ── Dịch vụ ───────────────────────── */}
@@ -233,15 +215,9 @@ export function SiteFooter() {
             Mã số thuế: 3702929454
           </p>
           <div className="flex gap-4">
-            <a href="#" className="hover:text-white transition-colors">
-              Chính sách bảo mật
-            </a>
-            <a href="#" className="hover:text-white transition-colors">
-              Điều khoản sử dụng
-            </a>
-            <a href="#" className="hover:text-white transition-colors">
-              Chính sách đổi trả
-            </a>
+            <a href="/chinh-sach-bao-mat">Chính sách bảo mật</a>
+            <a href="/dieu-khoan-su-dung">Điều khoản sử dụng</a>
+            <a href="/chinh-sach-doi-tra">Chính sách đổi trả</a>
           </div>
         </div>
       </div>
