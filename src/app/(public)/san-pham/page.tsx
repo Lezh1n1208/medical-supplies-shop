@@ -16,7 +16,7 @@ import { useSearchParams } from "next/navigation";
 
 const PAGE_SIZE = 16;
 
-export default function ProductsPage() {
+export default function ProductsPageClient() {
   const searchParams = useSearchParams();
   const urlSearch = searchParams.get("search") ?? "";
 
@@ -99,7 +99,6 @@ export default function ProductsPage() {
 
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="flex flex-col lg:grid lg:grid-cols-[220px_1fr] lg:grid-rows-[auto_1fr] gap-x-6">
-          {/* Toolbar */}
           <div className="lg:col-span-2 lg:row-start-1">
             <ProductToolbar
               searchQ={searchQ}
@@ -110,14 +109,12 @@ export default function ProductsPage() {
             />
           </div>
 
-          {/* Sidebar (desktop) */}
           <aside className="hidden lg:block lg:row-start-2">
             <div className="bg-white rounded-2xl border border-gray-200 p-4 sticky top-[var(--top-header-height)]">
               {sidebar}
             </div>
           </aside>
 
-          {/* Product grid */}
           <div className="lg:col-start-2 lg:row-start-2 min-w-0">
             <ProductGrid
               items={items}
@@ -125,6 +122,7 @@ export default function ProductsPage() {
               isError={isError}
               onClearFilters={handleClearFilters}
             />
+
             <ProductPagination
               current={page}
               total={totalPages}
@@ -137,7 +135,6 @@ export default function ProductsPage() {
         </div>
       </div>
 
-      {/* Mobile sidebar overlay */}
       {mobileSidebar && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <button
