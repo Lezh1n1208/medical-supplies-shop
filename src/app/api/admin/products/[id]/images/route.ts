@@ -27,3 +27,16 @@ export async function POST(
     return handleError(err);
   }
 }
+
+export async function GET(
+  _req: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  try {
+    const { id } = await params;
+    const images = await ProductImageAdminService.getByProduct(id);
+    return NextResponse.json({ images });
+  } catch (err: any) {
+    return handleError(err);
+  }
+}

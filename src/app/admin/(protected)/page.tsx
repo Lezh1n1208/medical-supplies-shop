@@ -45,12 +45,13 @@ export default function AdminDashboardPage() {
   const { data: products, isLoading: loadingProds } = useAdminProducts();
   const { data: quotes, isLoading: loadingQuotes } = useAdminQuoteRequests();
 
-  const onSaleCount = products?.filter((p) => p.sale_price != null).length ?? 0;
+  const onSaleCount =
+    products?.items?.filter((p) => p.sale_price != null).length ?? 0;
 
   const stats = [
     {
       label: "Tổng sản phẩm",
-      value: products?.length ?? 0,
+      value: products?.total ?? 0,
       icon: Package,
       color: "#1565C0",
       isLoading: loadingProds,
@@ -64,7 +65,7 @@ export default function AdminDashboardPage() {
     },
     {
       label: "Yêu cầu báo giá",
-      value: quotes?.length ?? 0,
+      value: quotes?.total ?? 0,
       icon: MessageSquare,
       color: "#7B1FA2",
       isLoading: loadingQuotes,
@@ -90,7 +91,7 @@ export default function AdminDashboardPage() {
       );
     }
 
-    if (!quotes?.length) {
+    if (!quotes?.total) {
       return (
         <div className="p-8 text-center text-gray-400 text-[13px]">
           Chưa có yêu cầu báo giá nào
@@ -118,7 +119,7 @@ export default function AdminDashboardPage() {
         </thead>
 
         <tbody>
-          {quotes.slice(0, 5).map((q) => (
+          {quotes.items.slice(0, 5).map((q) => (
             <tr
               key={q.id}
               className="border-b border-gray-50 hover:bg-gray-50 transition-colors"

@@ -108,7 +108,7 @@ export class ProductImageAdminService {
       .from("product_images")
       .update({ is_thumbnail: true })
       .eq("id", imageId)
-      .eq("product_id", productId) // tránh set thumbnail của product khác
+      .eq("product_id", productId)
       .select()
       .single();
 
@@ -131,5 +131,16 @@ export class ProductImageAdminService {
         data.map((img) => CloudinaryService.delete(img.public_id)),
       );
     }
+  }
+
+  static async getByProduct(productId: string) {
+    const { data, error } = await supabaseAdmin
+      .from("product_images")
+      .select("*")
+      .eq("product_id", productId)
+      .order("sort_order", { ascending: true });
+
+    assertNoError(error);
+    return ProductImageSchema.array().parse(data);
   }
 }

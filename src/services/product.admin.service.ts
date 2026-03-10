@@ -6,6 +6,7 @@ import {
   UpdateProductSchema,
 } from "@/schemas/product.schema";
 import { ProductImageAdminService } from "./product-image.admin.service";
+import { z } from "zod";
 
 /* ========================
    FILTERS
@@ -20,8 +21,12 @@ export interface AdminProductFilters {
   limit?: number;
 }
 
+export type AdminProduct = z.infer<typeof ProductSchema> & {
+  thumbnail_url: string | null;
+};
+
 export interface AdminProductListResult {
-  items: ReturnType<typeof ProductSchema.parse>[];
+  items: AdminProduct[];
   total: number;
   page: number;
   limit: number;
@@ -45,7 +50,9 @@ export class ProductAdminService {
       limit = 20,
     } = filters;
 
-    let query = supabaseAdmin.from("products").select("*", { count: "exact" });
+    let query = supabaseAdmin
+      .from("products")
+      .select("*, product_images(image_url, is_thumbnail)", { count: "exact" });
 
     if (search) {
       query = query.ilike("name", `%${search}%`);
@@ -65,8 +72,20 @@ export class ProductAdminService {
     const { data, error, count } = await query;
     assertNoError(error);
 
+    const items: AdminProduct[] = (data ?? []).map(
+      ({ product_images, ...rest }) => ({
+        ...ProductSchema.parse(rest),
+        thumbnail_url:
+          (
+            product_images as
+              | { image_url: string; is_thumbnail: boolean }[]
+              | null
+          )?.find((img) => img.is_thumbnail)?.image_url ?? null,
+      }),
+    );
+
     return {
-      items: ProductSchema.array().parse(data),
+      items,
       total: count ?? 0,
       page,
       limit,

@@ -74,3 +74,38 @@ export function useDeleteProduct() {
     },
   });
 }
+
+export function useProductImages(productId: string | undefined) {
+  return useQuery({
+    queryKey: productId ? queryKeys.admin.products.images(productId) : [],
+    queryFn: () => productApi.getImages(productId!),
+    enabled: !!productId,
+  });
+}
+
+export function useDeleteProductImage(productId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (imageId: string) => productApi.deleteImage(productId, imageId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.admin.products.images(productId),
+      });
+    },
+    onError: () => toast.error("Xóa ảnh thất bại"),
+  });
+}
+
+export function useSetThumbnail(productId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (imageId: string) =>
+      productApi.setThumbnail(productId, imageId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.admin.products.images(productId),
+      });
+    },
+    onError: () => toast.error("Đặt thumbnail thất bại"),
+  });
+}

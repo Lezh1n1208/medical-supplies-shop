@@ -1,3 +1,4 @@
+import { ProductImage } from "@/schemas/product-image.schema";
 import type {
   Product,
   CreateProduct,
@@ -67,5 +68,28 @@ export const productApi = {
   delete: async (id: string): Promise<void> => {
     const res = await fetch(`${BASE}/${id}`, { method: "DELETE" });
     if (!res.ok) throw new Error((await res.json()).error);
+  },
+  getImages: async (productId: string): Promise<ProductImage[]> => {
+    const res = await fetch(`${BASE}/${productId}/images`);
+    if (!res.ok) throw new Error((await res.json()).error);
+    return (await res.json()).images;
+  },
+
+  deleteImage: async (productId: string, imageId: string): Promise<void> => {
+    const res = await fetch(`${BASE}/${productId}/images/${imageId}`, {
+      method: "DELETE",
+    });
+    if (!res.ok) throw new Error((await res.json()).error);
+  },
+
+  setThumbnail: async (
+    productId: string,
+    imageId: string,
+  ): Promise<ProductImage> => {
+    const res = await fetch(`${BASE}/${productId}/images/${imageId}`, {
+      method: "PATCH",
+    });
+    if (!res.ok) throw new Error((await res.json()).error);
+    return (await res.json()).image;
   },
 };
