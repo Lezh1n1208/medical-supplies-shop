@@ -4,10 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  LayoutDashboard,
-  Folder,
-  Package,
-  MessageSquare,
   LogOut,
   ChevronLeft,
   ChevronRight,
@@ -16,13 +12,8 @@ import {
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const NAV = [
-  { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
-  { href: "/admin/categories", label: "Danh mục", icon: Folder },
-  { href: "/admin/products", label: "Sản phẩm", icon: Package },
-  { href: "/admin/quote-requests", label: "Báo giá", icon: MessageSquare },
-];
+import { ADMIN_NAV_LINKS } from "@/constants/navigation";
+import Image from "next/image";
 
 function SidebarContent({
   collapsed,
@@ -44,7 +35,14 @@ function SidebarContent({
       {/* Logo */}
       <div className="flex items-center gap-3 px-4 h-16 border-b border-white/10 flex-shrink-0">
         <div className="w-8 h-8 rounded-lg bg-teal-500 flex items-center justify-center flex-shrink-0">
-          <Stethoscope size={16} className="text-white" />
+          <Image
+            src="/logo.png"
+            alt="Ánh Dương Phát"
+            width={44}
+            height={44}
+            className="object-contain rounded-lg"
+            priority
+          />
         </div>
 
         {!collapsed && (
@@ -53,7 +51,7 @@ function SidebarContent({
               Ánh Dương Phát
             </p>
             <p className="text-[10px] text-white/40 whitespace-nowrap">
-              Admin Panel
+              Trang Admin
             </p>
           </div>
         )}
@@ -61,7 +59,7 @@ function SidebarContent({
 
       {/* Nav */}
       <nav className="flex-1 py-4 px-2 space-y-1 overflow-y-auto">
-        {NAV.map(({ href, label, icon: Icon, exact }) => {
+        {ADMIN_NAV_LINKS.map(({ href, label, icon: Icon, exact }) => {
           const isActive = exact
             ? pathname === href
             : pathname.startsWith(href);

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Phone } from "lucide-react";
-import { NAV_LINKS } from "@/constants/navigation";
+import { PUBLIC_NAV_LINKS } from "@/constants/navigation";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -20,7 +20,7 @@ export function MobileMenu({ isOpen, onClose }: Readonly<MobileMenuProps>) {
       }}
     >
       <div className="max-w-7xl mx-auto px-4 py-3 space-y-1">
-        {NAV_LINKS.map((link) => (
+        {PUBLIC_NAV_LINKS.map((link) => (
           <Link
             key={link.href}
             href={link.href}

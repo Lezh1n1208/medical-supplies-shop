@@ -4,8 +4,8 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, ChevronDown } from "lucide-react";
-import { NAV_LINKS } from "@/constants/navigation";
 import { usePublicCategories } from "@/hooks/use-public-categories";
+import { PUBLIC_NAV_LINKS } from "@/constants/navigation";
 
 interface NavbarProps {
   isScrolled: boolean;
@@ -98,7 +98,7 @@ export function Navbar({ isScrolled }: Readonly<NavbarProps>) {
           </div>
 
           {/* Navigation Links */}
-          {NAV_LINKS.map((link) => {
+          {PUBLIC_NAV_LINKS.map((link) => {
             const isActive = pathname === link.href;
 
             return (
