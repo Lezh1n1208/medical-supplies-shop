@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { usePublicProducts } from "@/hooks/use-public-products";
 import { usePublicCategories } from "@/hooks/use-public-categories";
@@ -12,15 +12,24 @@ import {
 import { ProductSidebar } from "@/components/features/public/pages/ProductSidebar";
 import { ProductGrid } from "@/components/features/public/pages/ProductGrid";
 import { ProductPagination } from "@/components/features/public/pages/ProductPagination";
+import { useSearchParams } from "next/navigation";
 
 const PAGE_SIZE = 16;
 
 export default function ProductsPage() {
+  const searchParams = useSearchParams();
+  const urlSearch = searchParams.get("search") ?? "";
+
   const [activeCategory, setActiveCategory] = useState("all");
-  const [searchQ, setSearchQ] = useState("");
+  const [searchQ, setSearchQ] = useState(urlSearch);
   const [sortValue, setSortValue] = useState<SortValue>("newest");
   const [page, setPage] = useState(1);
   const [mobileSidebar, setMobileSidebar] = useState(false);
+
+  useEffect(() => {
+    setSearchQ(urlSearch);
+    setPage(1);
+  }, [urlSearch]);
 
   const activeSort = SORT_OPTIONS.find((o) => o.value === sortValue)!;
 

@@ -106,7 +106,13 @@ export class ProductPublicService {
       });
 
     if (search) {
-      query = query.textSearch("search_vector", search);
+      const normalized = search.toLowerCase();
+      query = query.or(
+        [
+          `search_vector.plfts(simple).${search}`,
+          `name_unaccent.ilike.%${normalized}%`,
+        ].join(","),
+      );
     }
 
     if (categorySlug) {
@@ -154,5 +160,31 @@ export class ProductPublicService {
       limit,
       totalPages: count ? Math.ceil(count / limit) : 0,
     };
+  }
+
+  static async suggest(query: string) {
+    const supabase = await createServerSupabase();
+    const normalized = query.toLowerCase();
+
+    const { data, error } = await supabase
+      .from("products")
+      .select("id, name, slug, price_type, price, sale_price")
+      .or(
+        [
+          `search_vector.plfts(simple).${query}`,
+          `name_unaccent.ilike.%${normalized}%`,
+        ].join(","),
+      )
+      .limit(6); // chỉ cần vài gợi ý
+
+    assertNoError(error);
+    return (data ?? []) as {
+      id: string;
+      name: string;
+      slug: string;
+      price_type: "FIXED" | "CONTACT";
+      price: number | null;
+      sale_price: number | null;
+    }[];
   }
 }

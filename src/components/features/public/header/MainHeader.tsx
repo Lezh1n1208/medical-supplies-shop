@@ -1,23 +1,37 @@
 "use client";
-
 import Link from "next/link";
 import Image from "next/image";
 import { Search, Phone, Menu, X } from "lucide-react";
+
+type Suggestion = {
+  id: string;
+  name: string;
+  slug: string;
+  price_type: string;
+  price: number | null;
+  sale_price: number | null;
+};
 
 interface MainHeaderProps {
   searchVal: string;
   onSearchChange: (val: string) => void;
   onSearchSubmit: (e: React.SyntheticEvent) => void;
+  onSearchFocus: () => void;
   mobileOpen: boolean;
   onMobileToggle: () => void;
+  suggestions: Suggestion[];
+  onSuggestionClick: (slug: string) => void;
 }
 
 export function MainHeader({
   searchVal,
   onSearchChange,
   onSearchSubmit,
+  onSearchFocus,
   mobileOpen,
   onMobileToggle,
+  suggestions,
+  onSuggestionClick,
 }: Readonly<MainHeaderProps>) {
   return (
     <div className="bg-white border-b border-gray-200">
@@ -59,7 +73,10 @@ export function MainHeader({
         </Link>
 
         {/* Search */}
-        <form onSubmit={onSearchSubmit} className="flex-1 max-w-xl mx-auto">
+        <form
+          onSubmit={onSearchSubmit}
+          className="flex-1 max-w-xl mx-auto relative"
+        >
           <div className="relative flex">
             <div className="flex-1 relative">
               <Search
@@ -70,6 +87,7 @@ export function MainHeader({
                 type="text"
                 value={searchVal}
                 onChange={(e) => onSearchChange(e.target.value)}
+                onFocus={onSearchFocus}
                 placeholder="Tìm kiếm sản phẩm"
                 className="w-full pl-9 pr-4 py-2.5 border border-gray-300 border-r-0 rounded-l-lg bg-gray-50 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all"
               />
@@ -82,6 +100,31 @@ export function MainHeader({
               Tìm kiếm
             </button>
           </div>
+
+          {/* Suggestions dropdown */}
+          {suggestions.length > 0 && (
+            <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 border-t-0 rounded-b-lg shadow-xl z-50 overflow-hidden">
+              {suggestions.map((s) => (
+                <button
+                  key={s.id}
+                  type="button" // tránh trigger form submit
+                  onClick={() => onSuggestionClick(s.slug)}
+                  className="w-full flex items-center justify-between px-4 py-2.5 hover:bg-gray-50 transition-colors text-left"
+                >
+                  <span className="text-gray-800 text-[13px] line-clamp-1">
+                    {s.name}
+                  </span>
+                  <span className="text-gray-400 text-[11px] ml-4 flex-shrink-0">
+                    {s.price_type === "CONTACT"
+                      ? "Liên hệ"
+                      : `${new Intl.NumberFormat("vi-VN").format(
+                          s.sale_price ?? s.price ?? 0,
+                        )}đ`}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
         </form>
 
         {/* Hotline */}

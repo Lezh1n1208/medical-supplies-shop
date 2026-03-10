@@ -42,4 +42,17 @@ export const productPublicApi = {
     if (!res.ok) throw new Error((await res.json()).error);
     return (await res.json()).product;
   },
+
+  suggest: async (q: string) => {
+    const res = await fetch(`/api/products/suggest?q=${encodeURIComponent(q)}`);
+    if (!res.ok) throw new Error((await res.json()).error);
+    return (await res.json()).suggestions as {
+      id: string;
+      name: string;
+      slug: string;
+      price_type: "FIXED" | "CONTACT";
+      price: number | null;
+      sale_price: number | null;
+    }[];
+  },
 };

@@ -19,3 +19,13 @@ export function usePublicProduct(slug: string) {
     enabled: !!slug,
   });
 }
+
+export function useProductSuggest(q: string) {
+  return useQuery({
+    queryKey: queryKeys.products.suggest(q),
+    queryFn: () => productPublicApi.suggest(q),
+    enabled: q.trim().length >= 2, // chỉ fetch khi có ít nhất 2 ký tự
+    staleTime: 1000 * 30,          // cache 30 giây — suggest không cần fresh liên tục
+    placeholderData: [],           // không hiện loading, giữ data cũ
+  });
+}

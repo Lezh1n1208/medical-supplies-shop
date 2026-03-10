@@ -6,14 +6,32 @@ import { TopBar } from "./TopBar";
 import { MainHeader } from "./MainHeader";
 import { Navbar } from "./Navbar";
 import { MobileMenu } from "./MobileMenu";
+import { useProductSuggest } from "@/hooks/use-public-products";
+import { useDebounce } from "@/hooks/use-debounce";
 
 export function SiteHeader() {
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchVal, setSearchVal] = useState("");
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [searchFocused, setSearchFocused] = useState(false);
 
-  // ===== ResizeObserver for header height =====
+  // Debounce 300ms trước khi fetch
+  const debouncedSearch = useDebounce(searchVal, 300);
+  const { data: suggestions } = useProductSuggest(debouncedSearch);
+
+  // Đóng dropdown khi click ngoài
+  const searchRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        setSearchFocused(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const [isScrolled, setIsScrolled] = useState(false);
   const topHeaderRef = useRef<HTMLDivElement>(null);
   const navbarRef = useRef<HTMLDivElement>(null);
 
@@ -22,92 +40,67 @@ export function SiteHeader() {
       const topHeaderHeight = topHeaderRef.current
         ? Math.ceil(topHeaderRef.current.getBoundingClientRect().height)
         : 104;
-
       const navbarHeight = navbarRef.current
         ? Math.ceil(navbarRef.current.getBoundingClientRect().height)
         : 48;
-
-      const totalHeight = topHeaderHeight + navbarHeight;
-
-      // Tổng chiều cao cho spacer
       document.documentElement.style.setProperty(
         "--top-header-height",
-        `${totalHeight}px`,
+        `${topHeaderHeight + navbarHeight}px`,
       );
-
-      // Chiều cao Top + Main Header để Navbar dịch lên đúng vị trí
       document.documentElement.style.setProperty(
         "--top-header-main-height",
         `${topHeaderHeight}px`,
       );
     };
-
     const timer = setTimeout(updateHeight, 100);
-
     const observer = new ResizeObserver(updateHeight);
     if (topHeaderRef.current) observer.observe(topHeaderRef.current);
     if (navbarRef.current) observer.observe(navbarRef.current);
-
     return () => {
       clearTimeout(timer);
       observer.disconnect();
     };
   }, []);
 
-  // ===== Scroll handler =====
   useEffect(() => {
     let ticking = false;
     let lastScrollY = 0;
-
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       if (currentScrollY === lastScrollY) return;
-
-      // Close mobile menu when scrolling
-      if (mobileOpen && currentScrollY - lastScrollY > 1) {
-        setMobileOpen(false);
-      }
-
+      if (mobileOpen && currentScrollY - lastScrollY > 1) setMobileOpen(false);
       if (!ticking) {
         requestAnimationFrame(() => {
           const diff = currentScrollY - lastScrollY;
-
-          if (diff > 0 && currentScrollY > 80) {
-            setIsScrolled(true);
-          } else if (diff < 0) {
-            setIsScrolled(false);
-          }
-
+          if (diff > 0 && currentScrollY > 80) setIsScrolled(true);
+          else if (diff < 0) setIsScrolled(false);
           lastScrollY = currentScrollY;
           ticking = false;
         });
-
         ticking = true;
       }
     };
-
     window.addEventListener("scroll", handleScroll, { passive: true });
-
     return () => window.removeEventListener("scroll", handleScroll);
   }, [mobileOpen]);
 
-  // ===== Search =====
   const handleSearch = (e: React.SyntheticEvent) => {
     e.preventDefault();
-
     const value = searchVal.trim();
-
     if (value) {
+      setSearchFocused(false);
       router.push(`/san-pham?search=${encodeURIComponent(value)}`);
     }
   };
 
-  // ===== Render =====
+  const showSuggestions =
+    searchFocused &&
+    debouncedSearch.trim().length >= 2 &&
+    !!suggestions?.length;
+
   return (
     <>
-      {/* Header Wrapper */}
       <div className="fixed top-0 left-0 right-0 z-50">
-        {/* Top + Main Header - Ẩn khi scroll */}
         <div
           ref={topHeaderRef}
           className="bg-white"
@@ -120,22 +113,31 @@ export function SiteHeader() {
           }}
         >
           <TopBar />
-          <MainHeader
-            searchVal={searchVal}
-            onSearchChange={setSearchVal}
-            onSearchSubmit={handleSearch}
-            mobileOpen={mobileOpen}
-            onMobileToggle={() => setMobileOpen((v) => !v)}
-          />
+          {/* searchRef wrap quanh MainHeader để detect click ngoài */}
+          <div ref={searchRef}>
+            <MainHeader
+              searchVal={searchVal}
+              onSearchChange={setSearchVal}
+              onSearchSubmit={handleSearch}
+              onSearchFocus={() => setSearchFocused(true)}
+              mobileOpen={mobileOpen}
+              onMobileToggle={() => setMobileOpen((v) => !v)}
+              // Suggestions dropdown
+              suggestions={showSuggestions ? suggestions : []}
+              onSuggestionClick={(slug) => {
+                setSearchVal("");
+                setSearchFocused(false);
+                router.push(`/san-pham/${slug}`);
+              }}
+            />
+          </div>
         </div>
 
-        {/* Navbar - Ẩn theo chiều cao của Top + Main */}
         <div ref={navbarRef}>
           <Navbar isScrolled={isScrolled} />
         </div>
       </div>
 
-      {/* Spacer */}
       <div
         className="hidden md:block"
         style={{ height: "var(--top-header-height)" }}
@@ -145,7 +147,6 @@ export function SiteHeader() {
         style={{ height: "var(--top-header-height)" }}
       />
 
-      {/* Mobile Menu */}
       <MobileMenu isOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
     </>
   );

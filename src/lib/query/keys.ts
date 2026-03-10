@@ -11,6 +11,7 @@ export const queryKeys = {
     all: ["products"] as const,
     list: (filters: ProductFilters) => ["products", "list", filters] as const,
     detail: (slug: string) => ["products", slug] as const,
+    suggest: (q: string) => ["products", "suggest", q] as const,
   },
 
   admin: {
