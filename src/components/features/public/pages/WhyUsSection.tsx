@@ -92,9 +92,8 @@ export function WhyUsSection() {
               className="text-gray-600 mb-8 max-w-lg"
               style={{ fontSize: "15px", lineHeight: 1.8 }}
             >
-              Với kinh nghiệm hơn 15 năm trong ngành thiết bị y tế, MedPro Việt
-              Nam tự hào là đơn vị cung ứng được Bộ Y tế chứng nhận, đối tác
-              chính thức của hơn 50 thương hiệu y tế hàng đầu thế giới.
+              Với phương châm hoạt động “Uy tín tạo niềm tin – Chất lượng tạo giá trị”, Ánh Dương Phát cam kết mang đến cho khách hàng những sản phẩm đạt tiêu chuẩn chất lượng, nguồn gốc rõ ràng và giá thành hợp lý.
+
             </p>
 
             <a
