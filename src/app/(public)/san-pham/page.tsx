@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { usePublicProducts } from "@/hooks/use-public-products";
 import { usePublicCategories } from "@/hooks/use-public-categories";
@@ -16,7 +16,7 @@ import { useSearchParams } from "next/navigation";
 
 const PAGE_SIZE = 16;
 
-export default function ProductsPageClient() {
+function ProductsPageContent() {
   const searchParams = useSearchParams();
   const urlSearch = searchParams.get("search") ?? "";
 
@@ -163,5 +163,13 @@ export default function ProductsPageClient() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense>
+      <ProductsPageContent />
+    </Suspense>
   );
 }
