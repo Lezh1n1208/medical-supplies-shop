@@ -7,6 +7,10 @@ export async function proxy(request: NextRequest) {
   const session = request.cookies.get("admin_session")?.value;
   const isValid = verifyAdminSession(session);
 
+  if (pathname === "/admin/login" && isValid) {
+    return NextResponse.redirect(new URL("/admin", request.url));
+  }
+
   if (pathname.startsWith("/admin") && !pathname.startsWith("/admin/login")) {
     if (!isValid) {
       return NextResponse.redirect(new URL("/admin/login", request.url));
