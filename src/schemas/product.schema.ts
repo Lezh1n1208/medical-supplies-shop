@@ -19,6 +19,7 @@ const ProductBaseSchema = z.object({
   price: z.number().nonnegative().nullable().optional(),
   sale_price: z.number().nonnegative().nullable().optional(),
   is_best_seller: z.boolean().default(false),
+  rating: z.number().min(0).max(5).default(0),
 });
 
 /* =========================
@@ -26,7 +27,6 @@ const ProductBaseSchema = z.object({
 ========================= */
 export const ProductSchema = ProductBaseSchema.extend({
   id: z.uuid(),
-  rating: z.number().min(0).max(5).default(0),
   created_at: z.string(),
   updated_at: z.string(),
 });

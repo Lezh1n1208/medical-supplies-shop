@@ -1,4 +1,3 @@
-// src/app/api/admin/products/[id]/route.ts
 import { handleError } from "@/app/api/handle-error";
 import { ProductAdminService } from "@/services/product.admin.service";
 import { NextRequest, NextResponse } from "next/server";
@@ -29,12 +28,11 @@ export async function PATCH(
       if (key === "files") continue;
       if (value === "") continue;
 
-      // 👇 parse đúng kiểu trước khi đưa vào raw
       if (key === "is_best_seller") {
         raw[key] = value === "true";
         continue;
       }
-      if (key === "price" || key === "sale_price") {
+      if (key === "price" || key === "sale_price" || key === "rating") {
         raw[key] = Number(value);
         continue;
       }

@@ -65,6 +65,7 @@ export default function ProductFormDialog({
   const [isBestSeller, setIsBestSeller] = useState(
     editing?.is_best_seller ?? false,
   );
+  const [rating, setRating] = useState(editing?.rating?.toString() ?? "0");
   const [files, setFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
 
@@ -96,6 +97,7 @@ export default function ProductFormDialog({
       sale_price:
         priceType === "FIXED" && salePrice ? Number(salePrice) : undefined,
       is_best_seller: isBestSeller,
+      rating: Number(rating),
     };
 
     if (editing) {
@@ -299,6 +301,19 @@ export default function ProductFormDialog({
                 </div>
               </>
             )}
+
+            <div className="space-y-1.5">
+              <Label>Đánh giá (0 – 5)</Label>
+              <Input
+                type="number"
+                min={0}
+                max={5}
+                step={0.1}
+                value={rating}
+                onChange={(e) => setRating(e.target.value)}
+                placeholder="0"
+              />
+            </div>
 
             <div className="col-span-2 space-y-1.5">
               <Label>Mô tả</Label>

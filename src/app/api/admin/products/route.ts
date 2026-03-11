@@ -47,6 +47,7 @@ export async function POST(req: NextRequest) {
         ? Number(formData.get("sale_price"))
         : undefined,
       is_best_seller: formData.get("is_best_seller") === "true",
+      rating: formData.get("rating") ? Number(formData.get("rating")) : 0,
     };
 
     const files = formData.getAll("files") as File[];
