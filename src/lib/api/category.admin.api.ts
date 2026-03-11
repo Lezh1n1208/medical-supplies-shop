@@ -3,6 +3,7 @@ import type {
   CreateCategory,
   UpdateCategory,
 } from "@/schemas/category.schema";
+import { appendFormData } from "./append";
 
 const BASE = "/api/admin/categories";
 

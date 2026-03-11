@@ -1,7 +1,7 @@
 /**
  * Append object data into FormData safely
  */
-const appendFormData = (formData: FormData, data: Record<string, unknown>) => {
+export const appendFormData = (formData: FormData, data: Record<string, unknown>) => {
   Object.entries(data).forEach(([key, value]) => {
     if (value == null) return;
 

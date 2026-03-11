@@ -8,6 +8,7 @@ import type {
   AdminProductFilters,
   AdminProductListResult,
 } from "@/services/product.admin.service";
+import { appendFormData } from "./append";
 
 const BASE = "/api/admin/products";
 
