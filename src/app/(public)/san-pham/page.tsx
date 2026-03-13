@@ -12,15 +12,17 @@ import {
 import { ProductSidebar } from "@/components/features/public/pages/ProductSidebar";
 import { ProductGrid } from "@/components/features/public/pages/ProductGrid";
 import { ProductPagination } from "@/components/features/public/pages/ProductPagination";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const PAGE_SIZE = 16;
 
 function ProductsPageContent() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const urlSearch = searchParams.get("search") ?? "";
+  const urlCategory = searchParams.get("category") ?? "all";
 
-  const [activeCategory, setActiveCategory] = useState("all");
+  const [activeCategory, setActiveCategory] = useState(urlCategory);
   const [searchQ, setSearchQ] = useState(urlSearch);
   const [sortValue, setSortValue] = useState<SortValue>("newest");
   const [page, setPage] = useState(1);
@@ -28,8 +30,9 @@ function ProductsPageContent() {
 
   useEffect(() => {
     setSearchQ(urlSearch);
+    setActiveCategory(urlCategory);
     setPage(1);
-  }, [urlSearch]);
+  }, [urlSearch, urlCategory]);
 
   const activeSort = SORT_OPTIONS.find((o) => o.value === sortValue)!;
 
@@ -49,14 +52,30 @@ function ProductsPageContent() {
   const totalPages = data?.totalPages ?? 0;
 
   function handleCategory(slug: string) {
-    setActiveCategory(slug);
-    setPage(1);
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (slug === "all") params.delete("category");
+    else params.set("category", slug);
+
+    const query = params.toString();
+    const url = query ? "/san-pham?" + query : "san-pham";
+
+    router.push(url);
     setMobileSidebar(false);
   }
 
   function handleSearch(q: string) {
-    setSearchQ(q);
-    setPage(1);
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (q.trim()) params.set("search", q.trim());
+    else params.delete("search");
+
+    params.delete("page");
+
+    const query = params.toString();
+    const url = query ? "/san-pham?" + query : "/san-pham";
+
+    router.push(url);
   }
 
   function handleSort(value: SortValue) {
@@ -66,9 +85,9 @@ function ProductsPageContent() {
 
   function handleClearFilters() {
     setSearchQ("");
-    setActiveCategory("all");
     setSortValue("newest");
     setPage(1);
+    router.push("/san-pham");
   }
 
   const sidebar = (
