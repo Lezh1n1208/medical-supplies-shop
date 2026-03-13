@@ -27,7 +27,12 @@ export class CloudinaryService {
             resource_type: "image",
           },
           (error, result) => {
-            if (error || !result) return reject(error);
+            if (error || !result)
+              return reject(
+                error
+                  ? new Error(error.message)
+                  : new Error("Upload failed: no result returned"),
+              );
             resolve({
               public_id: result.public_id,
               secure_url: result.secure_url,

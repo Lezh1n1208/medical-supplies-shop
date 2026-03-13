@@ -46,7 +46,7 @@ const refinePriceConstraints = (data: PriceInput, ctx: z.RefinementCtx) => {
     if (data.price == null) {
       ctx.addIssue({
         code: "custom",
-        message: "Price is required when price_type is FIXED",
+        message: "Vui lòng nhập giá khi chọn loại giá cố định",
         path: ["price"],
       });
     }
@@ -57,7 +57,7 @@ const refinePriceConstraints = (data: PriceInput, ctx: z.RefinementCtx) => {
     ) {
       ctx.addIssue({
         code: "custom",
-        message: "Sale price must be less than or equal to price",
+        message: "Giá sale phải nhỏ hơn hoặc bằng giá gốc",
         path: ["sale_price"],
       });
     }
@@ -67,14 +67,14 @@ const refinePriceConstraints = (data: PriceInput, ctx: z.RefinementCtx) => {
     if (data.price != null) {
       ctx.addIssue({
         code: "custom",
-        message: "Price must be null when price_type is CONTACT",
+        message: "Giá sản phẩm phải để trống với loại mặt hàng liên hệ",
         path: ["price"],
       });
     }
     if (data.sale_price != null) {
       ctx.addIssue({
         code: "custom",
-        message: "Sale price must be null when price_type is CONTACT",
+        message: "Giá sale phải để trống với loại mặt hàng liên hệ",
         path: ["sale_price"],
       });
     }
