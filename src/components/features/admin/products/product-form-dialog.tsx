@@ -68,6 +68,7 @@ export default function ProductFormDialog({
   const [rating, setRating] = useState(editing?.rating?.toString() ?? "0");
   const [files, setFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const { data: existingImages = [], isLoading: loadingImages } =
     useProductImages(editing?.id);
@@ -80,13 +81,55 @@ export default function ProductFormDialog({
     if (!editing) setSlug(slugify(v));
   };
 
-  const handleFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFiles = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = Array.from(e.target.files ?? []);
-    setFiles(selected);
-    setPreviews(selected.map((f) => URL.createObjectURL(f)));
+    if (selected.length === 0) return;
+
+    const inMemoryFiles = await Promise.all(
+      selected.map(async (file) => {
+        const buffer = await file.arrayBuffer();
+        return new File([buffer], file.name, { type: file.type });
+      }),
+    );
+
+    setFiles((prev) => [...prev, ...inMemoryFiles]);
+    setPreviews((prev) => [
+      ...prev,
+      ...inMemoryFiles.map((f) => URL.createObjectURL(f)),
+    ]);
+  };
+
+  const handleRemovePreview = (index: number) => {
+    URL.revokeObjectURL(previews[index]); // giải phóng memory
+    setFiles((prev) => prev.filter((_, i) => i !== index));
+    setPreviews((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const validate = () => {
+    const errs: Record<string, string> = {};
+    if (!name.trim()) errs.name = "Tên sản phẩm không được để trống";
+    if (!slug.trim()) errs.slug = "Slug không được để trống";
+    if (priceType === "FIXED" && !price) errs.price = "Vui lòng nhập giá";
+    if (
+      priceType === "FIXED" &&
+      price &&
+      salePrice &&
+      Number(salePrice) > Number(price)
+    )
+      errs.sale_price = "Giá khuyến mãi phải nhỏ hơn giá gốc";
+    if (Number(rating) < 0 || Number(rating) > 5)
+      errs.rating = "Đánh giá phải từ 0 đến 5";
+    return errs;
   };
 
   const handleSubmit = () => {
+    const errs = validate();
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs);
+      return;
+    }
+    setErrors({});
+
     const data = {
       name,
       slug,
@@ -205,7 +248,18 @@ export default function ProductFormDialog({
                     key={i}
                     className="w-20 h-20 rounded-lg overflow-hidden relative border border-gray-200"
                   >
-                    <Image src={src} alt="" fill className="object-cover" />
+                    <img
+                      src={src}
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleRemovePreview(i)}
+                      className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center"
+                    >
+                      <X size={10} className="text-white" />
+                    </button>
                   </div>
                 ))}
 
@@ -234,14 +288,29 @@ export default function ProductFormDialog({
               <Label>Tên sản phẩm</Label>
               <Input
                 value={name}
-                onChange={(e) => handleNameChange(e.target.value)}
+                onChange={(e) => {
+                  handleNameChange(e.target.value);
+                  setErrors((p) => ({ ...p, name: "" }));
+                }}
                 placeholder="Băng gạc vô trùng..."
               />
+              {errors.name && (
+                <p className="text-[11px] text-red-500 mt-0.5">{errors.name}</p>
+              )}
             </div>
 
             <div className="col-span-2 space-y-1.5">
               <Label>Slug</Label>
-              <Input value={slug} onChange={(e) => setSlug(e.target.value)} />
+              <Input
+                value={slug}
+                onChange={(e) => {
+                  setSlug(e.target.value);
+                  setErrors((p) => ({ ...p, slug: "" }));
+                }}
+              />
+              {errors.slug && (
+                <p className="text-[11px] text-red-500 mt-0.5">{errors.slug}</p>
+              )}
             </div>
 
             <div className="space-y-1.5">
@@ -284,9 +353,17 @@ export default function ProductFormDialog({
                     type="number"
                     min={0}
                     value={price}
-                    onChange={(e) => setPrice(e.target.value)}
+                    onChange={(e) => {
+                      setPrice(e.target.value);
+                      setErrors((p) => ({ ...p, price: "" }));
+                    }}
                     placeholder="150000"
                   />
+                  {errors.price && (
+                    <p className="text-[11px] text-red-500 mt-0.5">
+                      {errors.price}
+                    </p>
+                  )}
                 </div>
 
                 <div className="space-y-1.5">
@@ -295,9 +372,17 @@ export default function ProductFormDialog({
                     type="number"
                     min={0}
                     value={salePrice}
-                    onChange={(e) => setSalePrice(e.target.value)}
+                    onChange={(e) => {
+                      setSalePrice(e.target.value);
+                      setErrors((p) => ({ ...p, sale_price: "" }));
+                    }}
                     placeholder="Để trống nếu không có"
                   />
+                  {errors.sale_price && (
+                    <p className="text-[11px] text-red-500 mt-0.5">
+                      {errors.sale_price}
+                    </p>
+                  )}
                 </div>
               </>
             )}
@@ -310,9 +395,17 @@ export default function ProductFormDialog({
                 max={5}
                 step={0.1}
                 value={rating}
-                onChange={(e) => setRating(e.target.value)}
+                onChange={(e) => {
+                  setRating(e.target.value);
+                  setErrors((p) => ({ ...p, rating: "" }));
+                }}
                 placeholder="0"
               />
+              {errors.rating && (
+                <p className="text-[11px] text-red-500 mt-0.5">
+                  {errors.rating}
+                </p>
+              )}
             </div>
 
             <div className="col-span-2 space-y-1.5">

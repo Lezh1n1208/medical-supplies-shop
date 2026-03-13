@@ -7,6 +7,7 @@ import {
   UpdateCategorySchema,
 } from "@/schemas/category.schema";
 import { CloudinaryService } from "./cloudinary.service";
+import { AppError } from "@/lib/errors";
 
 /* ========================
    SERVICE
@@ -43,16 +44,21 @@ export class CategoryAdminService {
     if (thumbnail) {
       const validation = validateUploadFiles([thumbnail]);
       if (!validation.valid) {
-        throw Object.assign(new Error("Validation failed"), {
-          code: "VALIDATION_ERROR",
-          details: validation.errors,
-        });
+        throw AppError.validation(
+          "Ảnh thumbnail không hợp lệ",
+          validation.errors,
+        );
       }
 
-      const uploaded = await CloudinaryService.uploadBuffer(
-        Buffer.from(await thumbnail.arrayBuffer()),
-        { folder: "categories" },
-      );
+      let uploaded;
+      try {
+        uploaded = await CloudinaryService.uploadBuffer(
+          Buffer.from(await thumbnail.arrayBuffer()),
+          { folder: "categories" },
+        );
+      } catch {
+        throw AppError.internal("Tải ảnh thumbnail thất bại, vui lòng thử lại");
+      }
 
       thumbnailData = {
         thumbnail_url: uploaded.secure_url,
@@ -87,10 +93,10 @@ export class CategoryAdminService {
     if (thumbnail) {
       const validation = validateUploadFiles([thumbnail]);
       if (!validation.valid) {
-        throw Object.assign(new Error("Validation failed"), {
-          code: "VALIDATION_ERROR",
-          details: validation.errors,
-        });
+        throw AppError.validation(
+          "Ảnh thumbnail không hợp lệ",
+          validation.errors,
+        );
       }
 
       // Lấy public_id cũ để xóa sau khi upload mới thành công
@@ -100,10 +106,17 @@ export class CategoryAdminService {
         .eq("id", id)
         .single();
 
-      const uploaded = await CloudinaryService.uploadBuffer(
-        Buffer.from(await thumbnail.arrayBuffer()),
-        { folder: "categories" },
-      );
+      let uploaded;
+      try {
+        uploaded = await CloudinaryService.uploadBuffer(
+          Buffer.from(await thumbnail.arrayBuffer()),
+          { folder: "categories" },
+        );
+      } catch {
+        throw AppError.internal(
+          "Cập nhật ảnh thumbnail thất bại, vui lòng thử lại",
+        );
+      }
 
       thumbnailData = {
         thumbnail_url: uploaded.secure_url,
@@ -112,7 +125,11 @@ export class CategoryAdminService {
 
       // Xóa ảnh cũ trên Cloudinary sau khi upload mới thành công
       if (existing?.thumbnail_public_id) {
-        await CloudinaryService.delete(existing.thumbnail_public_id);
+        try {
+          await CloudinaryService.delete(existing.thumbnail_public_id);
+        } catch (err) {
+          console.error("[Category] Failed to delete old thumbnail:", err);
+        }
       }
     }
 
@@ -151,7 +168,11 @@ export class CategoryAdminService {
 
     // Xóa ảnh trên Cloudinary sau khi xóa DB thành công
     if (existing?.thumbnail_public_id) {
-      await CloudinaryService.delete(existing.thumbnail_public_id);
+      try {
+        await CloudinaryService.delete(existing.thumbnail_public_id);
+      } catch (err) {
+        console.error("[Category] Failed to delete thumbnail:", err);
+      }
     }
 
     return { success: true };

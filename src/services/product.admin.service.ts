@@ -7,6 +7,7 @@ import {
 } from "@/schemas/product.schema";
 import { ProductImageAdminService } from "./product-image.admin.service";
 import { z } from "zod";
+import { AppError } from "@/lib/errors";
 
 /* ========================
    FILTERS
@@ -126,16 +127,27 @@ export class ProductAdminService {
     assertNoError(error);
     const product = ProductSchema.parse(result);
 
-    if (files.length > 0) {
-      try {
-        await ProductImageAdminService.uploadMany(product.id, files);
-      } catch (err) {
-        await supabaseAdmin.from("products").delete().eq("id", product.id);
-        throw err;
-      }
-    }
+    if (files.length === 0) return product;
 
-    return product;
+    try {
+      await ProductImageAdminService.uploadMany(product.id, files);
+      return product;
+    } catch (err) {
+      console.error("[Product image upload failed]", err);
+
+      const { error: rollbackError } = await supabaseAdmin
+        .from("products")
+        .delete()
+        .eq("id", product.id);
+
+      if (rollbackError) {
+        console.error("[Product rollback failed]", rollbackError);
+      }
+
+      throw AppError.internal(
+        "Tạo sản phẩm thất bại do lỗi tải ảnh. Hệ thống đã hoàn tác dữ liệu.",
+      );
+    }
   }
 
   static async update(id: string, data: unknown, files: File[] = []) {
@@ -151,16 +163,27 @@ export class ProductAdminService {
     assertNoError(error);
     const product = ProductSchema.parse(result);
 
-    if (files.length > 0) {
+    if (files.length === 0) return product;
+
+    try {
       await ProductImageAdminService.deleteAllByProduct(id);
       await ProductImageAdminService.uploadMany(id, files);
+      return product;
+    } catch {
+      throw AppError.internal(
+        "Sản phẩm đã được cập nhật nhưng cập nhật ảnh thất bại. Vui lòng thử lại phần ảnh.",
+      );
     }
-
-    return product;
   }
 
   static async delete(id: string) {
-    await ProductImageAdminService.deleteAllByProduct(id);
+    try {
+      await ProductImageAdminService.deleteAllByProduct(id);
+    } catch {
+      throw AppError.internal(
+        "Không thể xóa ảnh sản phẩm. Vui lòng thử lại sau.",
+      );
+    }
     const { error } = await supabaseAdmin
       .from("products")
       .delete()
