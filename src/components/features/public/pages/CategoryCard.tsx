@@ -38,10 +38,7 @@ export function CategoryCard({
             className="w-full h-full flex items-center justify-center"
             style={{ backgroundColor: style.color + "20" }}
           >
-            <span
-              className="font-bold text-2xl"
-              style={{ color: style.color }}
-            >
+            <span className="font-bold text-2xl" style={{ color: style.color }}>
               {cat.name.charAt(0)}
             </span>
           </div>

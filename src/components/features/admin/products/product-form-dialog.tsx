@@ -246,17 +246,20 @@ export default function ProductFormDialog({
                   <div
                     // eslint-disable-next-line react/no-array-index-key
                     key={i}
-                    className="w-20 h-20 rounded-lg overflow-hidden relative border border-gray-200"
+                    className="relative w-20 h-20"
                   >
-                    <img
-                      src={src}
-                      alt=""
-                      className="w-full h-full object-cover"
-                    />
+                    <div className="w-20 h-20 rounded-lg overflow-hidden border border-gray-200">
+                      <img
+                        src={src}
+                        alt=""
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+
                     <button
                       type="button"
                       onClick={() => handleRemovePreview(i)}
-                      className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center"
+                      className="absolute -top-1 -right-1 z-10 w-5 h-5 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center shadow-sm"
                     >
                       <X size={10} className="text-white" />
                     </button>
