@@ -1,9 +1,5 @@
-# *
 User-agent: *
 Allow: /
+Disallow: /admin
 
-# Host
-Host: https://your-domain.com
-
-# Sitemaps
-Sitemap: https://your-domain.com/sitemap.xml
+Sitemap: https://anhduongphat.vercel.app/sitemap.xml
