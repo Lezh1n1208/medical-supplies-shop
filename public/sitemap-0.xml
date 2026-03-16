@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-<url><loc>https://your-domain.com/chinh-sach-bao-mat</loc><lastmod>2026-03-16T11:01:55.245Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://your-domain.com/chinh-sach-doi-tra</loc><lastmod>2026-03-16T11:01:55.245Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://your-domain.com/dich-vu</loc><lastmod>2026-03-16T11:01:55.245Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://your-domain.com/dieu-khoan-su-dung</loc><lastmod>2026-03-16T11:01:55.245Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://your-domain.com/gioi-thieu</loc><lastmod>2026-03-16T11:01:55.245Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://your-domain.com/lien-he</loc><lastmod>2026-03-16T11:01:55.245Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://your-domain.com</loc><lastmod>2026-03-16T11:01:55.245Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://your-domain.com/san-pham</loc><lastmod>2026-03-16T11:01:55.245Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://your-domain.com/tin-tuc</loc><lastmod>2026-03-16T11:01:55.245Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://your-domain.com/admin/danh-muc</loc><lastmod>2026-03-16T11:01:55.245Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://your-domain.com/admin</loc><lastmod>2026-03-16T11:01:55.245Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://your-domain.com/admin/san-pham</loc><lastmod>2026-03-16T11:01:55.245Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://your-domain.com/admin/yeu-cau-bao-gia</loc><lastmod>2026-03-16T11:01:55.245Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://your-domain.com/admin/login</loc><lastmod>2026-03-16T11:01:55.245Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://anhduongphat.vercel.app/chinh-sach-bao-mat</loc><lastmod>2026-03-16T11:12:56.044Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://anhduongphat.vercel.app/chinh-sach-doi-tra</loc><lastmod>2026-03-16T11:12:56.045Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://anhduongphat.vercel.app/dich-vu</loc><lastmod>2026-03-16T11:12:56.045Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://anhduongphat.vercel.app/dieu-khoan-su-dung</loc><lastmod>2026-03-16T11:12:56.045Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://anhduongphat.vercel.app/gioi-thieu</loc><lastmod>2026-03-16T11:12:56.045Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://anhduongphat.vercel.app/lien-he</loc><lastmod>2026-03-16T11:12:56.045Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://anhduongphat.vercel.app</loc><lastmod>2026-03-16T11:12:56.045Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://anhduongphat.vercel.app/san-pham</loc><lastmod>2026-03-16T11:12:56.045Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://anhduongphat.vercel.app/tin-tuc</loc><lastmod>2026-03-16T11:12:56.045Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://anhduongphat.vercel.app/admin/danh-muc</loc><lastmod>2026-03-16T11:12:56.045Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://anhduongphat.vercel.app/admin</loc><lastmod>2026-03-16T11:12:56.045Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://anhduongphat.vercel.app/admin/san-pham</loc><lastmod>2026-03-16T11:12:56.045Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://anhduongphat.vercel.app/admin/yeu-cau-bao-gia</loc><lastmod>2026-03-16T11:12:56.045Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://anhduongphat.vercel.app/admin/login</loc><lastmod>2026-03-16T11:12:56.045Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
 </urlset>

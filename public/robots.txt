@@ -1,5 +1,10 @@
+# *
 User-agent: *
 Allow: /
 Disallow: /admin
 
+# Host
+Host: https://anhduongphat.vercel.app
+
+# Sitemaps
 Sitemap: https://anhduongphat.vercel.app/sitemap.xml

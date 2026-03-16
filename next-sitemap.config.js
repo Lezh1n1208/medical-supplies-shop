@@ -1,4 +1,15 @@
+/** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: 'https://your-domain.com',
-  generateRobotsTxt: true
-}
+  siteUrl: "https://anhduongphat.vercel.app",
+  generateRobotsTxt: true,
+
+  robotsTxtOptions: {
+    policies: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: ["/admin"],
+      },
+    ],
+  },
+};
